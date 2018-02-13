@@ -1,0 +1,60 @@
+﻿@model RaceListService.Models.memberDetailVM
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <h3>@Model.Name Current Target Time: @Model.currentTarget</h3>
+         <h4>  Simple Average of Predicted Times : @Model.simpleAverage</h4>
+       <h4>   Average of Selected Predicted Times : @Model.topAndtailAverage</h4>
+    @*<h4>  Average of Middle Three of Predicted Times : @Model.middleThreeAverage</h4>*@
+    <hr />
+    
+
+    <form method="post">
+
+        <table class="table">
+            <tr>
+                <th>
+                    Race Distance
+                </th>
+                <th>
+                    Race Actual Time
+                </th>
+                <th>
+                    Predicted Time for @ViewBag.targetdistance
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model.listOfRaces)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.lastRaceDistance)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.lastRaceTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.predictedTime)
+                </td>
+                <td>
+                    <input id="race@(item.lastRaceId)" type="checkbox"
+                           name="SelectedRaceIDs"
+                           value="@item.lastRaceId"
+                           @(Model.SelectedRaceIDs.Contains(item.lastRaceId) ? "checked" : "") />
+                </td>
+            </tr>
+    }
+
+        </table>
+        <div class="form-group">
+            <input type="submit" value="Update" class="form-control" />
+        </div>
+        <div class="form-group">
+            @Html.ActionLink("BACK TO List of Runners", "ListRunners", "Home", new { area = "" }, null)
+        </div>
+    </form>
+ </div>

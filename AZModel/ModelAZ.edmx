@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="rundistanceModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Discipline">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="distance">
+          <Key>
+            <PropertyRef Name="EFKey" />
+          </Key>
+          <Property Name="EFKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Distance" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="memberList">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="Distance" Type="float" />
+          <Property Name="Time" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="race">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="distance" Type="float" Nullable="false" />
+          <Property Name="time" Type="int" Nullable="false" />
+          <Property Name="runner" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="runners">
+          <Key>
+            <PropertyRef Name="EFKey" />
+          </Key>
+          <Property Name="EFKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="firstname" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="secondname" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ukan" Type="nvarchar(max)" />
+          <Property Name="dob" Type="date" />
+          <Property Name="email" Type="nvarchar(max)" />
+          <Property Name="Active" Type="bit" />
+        </EntityType>
+        <Association Name="FK_race_memberList">
+          <End Role="memberList" Type="Self.memberList" Multiplicity="1" />
+          <End Role="race" Type="Self.race" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="memberList">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="race">
+              <PropertyRef Name="runner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="rundistanceModelStoreContainer">
+          <EntitySet Name="Discipline" EntityType="Self.Discipline" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="distance" EntityType="Self.distance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="memberList" EntityType="Self.memberList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="race" EntityType="Self.race" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="runners" EntityType="Self.runners" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_race_memberList" Association="Self.FK_race_memberList">
+            <End Role="memberList" EntitySet="memberList" />
+            <End Role="race" EntitySet="race" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="rundistanceModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Discipline">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="distance">
+          <Key>
+            <PropertyRef Name="EFKey" />
+          </Key>
+          <Property Name="EFKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="memberList">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Distance" Type="Double" />
+          <Property Name="Time" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="races" Relationship="Self.FK_race_memberList" FromRole="memberList" ToRole="race" />
+        </EntityType>
+        <EntityType Name="race">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="distance" Type="Double" Nullable="false" />
+          <Property Name="time" Type="Int32" Nullable="false" />
+          <Property Name="runner" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="memberList" Relationship="Self.FK_race_memberList" FromRole="race" ToRole="memberList" />
+        </EntityType>
+        <EntityType Name="runner">
+          <Key>
+            <PropertyRef Name="EFKey" />
+          </Key>
+          <Property Name="EFKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="firstname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="secondname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ukan" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="dob" Type="DateTime" Precision="0" />
+          <Property Name="email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK_race_memberList">
+          <End Role="memberList" Type="Self.memberList" Multiplicity="1" />
+          <End Role="race" Type="Self.race" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="memberList">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="race">
+              <PropertyRef Name="runner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RunningEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Disciplines" EntityType="Self.Discipline" />
+          <EntitySet Name="distances" EntityType="Self.distance" />
+          <EntitySet Name="memberLists" EntityType="Self.memberList" />
+          <EntitySet Name="races" EntityType="Self.race" />
+          <EntitySet Name="runners" EntityType="Self.runner" />
+          <AssociationSet Name="FK_race_memberList" Association="Self.FK_race_memberList">
+            <End Role="memberList" EntitySet="memberLists" />
+            <End Role="race" EntitySet="races" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="rundistanceModelStoreContainer" CdmEntityContainer="RunningEntities">
+          <EntitySetMapping Name="Disciplines">
+            <EntityTypeMapping TypeName="rundistanceModel.Discipline">
+              <MappingFragment StoreEntitySet="Discipline">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="distances">
+            <EntityTypeMapping TypeName="rundistanceModel.distance">
+              <MappingFragment StoreEntitySet="distance">
+                <ScalarProperty Name="EFKey" ColumnName="EFKey" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Value" ColumnName="Distance" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="memberLists">
+            <EntityTypeMapping TypeName="rundistanceModel.memberList">
+              <MappingFragment StoreEntitySet="memberList">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="races">
+            <EntityTypeMapping TypeName="rundistanceModel.race">
+              <MappingFragment StoreEntitySet="race">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="distance" ColumnName="distance" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="runner" ColumnName="runner" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="runners">
+            <EntityTypeMapping TypeName="rundistanceModel.runner">
+              <MappingFragment StoreEntitySet="runners">
+                <ScalarProperty Name="EFKey" ColumnName="EFKey" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="secondname" ColumnName="secondname" />
+                <ScalarProperty Name="ukan" ColumnName="ukan" />
+                <ScalarProperty Name="dob" ColumnName="dob" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

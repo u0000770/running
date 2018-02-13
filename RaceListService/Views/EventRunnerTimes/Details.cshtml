@@ -1,0 +1,67 @@
+﻿@model RunningModel.EventRunnerTime
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>EventRunnerTime</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Target)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Target)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Actual)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Actual)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Active)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Active)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Event.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Event.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.runner.firstname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.runner.firstname)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.EFKey }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,57 @@
+﻿@model RaceListService.Models.runnerListVM
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Add New", "Create")
+</p>
+@using (Html.BeginForm("UpdateSelection", "runners", FormMethod.Post))
+{
+    <table class="table">
+        <tr>
+            <th>
+                Second Name
+            </th>
+            <th>
+                First Name
+            </th>
+            <th>
+                Select for Next Race
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.listOfRunners)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.secondname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.firstname)
+                </td>
+                <td>
+                    <input id="race@(item.EFKey)" type="checkbox"
+                           name="SelectedRunnerIDs"
+                           value="@item.EFKey"
+                           @(Model.SelectedRunnerIDs.Contains(item.EFKey) ? "checked" : "") />
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.EFKey }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.EFKey })
+                </td>
+            </tr>
+        }
+
+    </table>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Update Selection" class="btn btn-default" />
+        </div>
+    </div>
+}

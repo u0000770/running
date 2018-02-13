@@ -1,0 +1,38 @@
+﻿@model RRCCoreApp.ViewModel.NextRaceListVM
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Time</th>
+            <th>Based Upon</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.nextRaceList)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.predictedTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.lastRaceDistance)
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

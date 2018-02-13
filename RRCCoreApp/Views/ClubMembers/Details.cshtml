@@ -1,0 +1,39 @@
+﻿@model RRCCoreApp.ViewModel.MemberRaceListVM
+
+<div>
+    <hr />
+    <h4> Details for @Html.DisplayNameFor(model => model.AmNumber) : @Html.DisplayFor(model => model.AmNumber)</h4>
+    <hr />
+    @*<dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AmNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AmNumber)
+        </dd>
+    </dl>*@
+    <table class="table">
+        <tbody>
+            @foreach (var item in Model.list)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Distance)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.result)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a> || <a asp-action="Predict" asp-route-id="@Model.AmNumber">Next Race</a>
+</div>

@@ -1,0 +1,44 @@
+﻿@model RRCCoreApp.ViewModel.PredictTimesVM
+@{
+    ViewData["Title"] = "Predict";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Target times for @Html.DisplayFor(model => model.AthleteNumber)</h2>
+<p>
+   These times are based upon your Last Race:
+<p>
+   It was: @Html.DisplayFor(model => model.lastRaceType)
+</p>
+<p>
+  Your time:  @Html.DisplayFor(model => model.lastRaceTime)
+</p>
+
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Race Type</th>
+            <th>Reigel Time</th>
+            <th>Cameron Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var modelItem in Model.predictionList)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(item => modelItem.raceType)
+                </td>
+                <td>
+                    @Html.DisplayFor(item => modelItem.predictedTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(item => modelItem.camTime)
+                </td>
+              
+            </tr>
+        }
+    </tbody>
+</table>
+
+
