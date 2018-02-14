@@ -24,19 +24,14 @@ namespace RaceListService.Controllers
             {
                 Session["login"] = true;
                 TempData["targetdistance"] = 10000;
-                return RedirectToAction("ListRunners", "Home");
+                return RedirectToAction("Index", "NextRaces");
             }
             else
             {
-
-                if (un == "" && pw == "")
-                {
-                    return RedirectToAction("ListTargets");
-                }
                 Session["login"] = false;
                 return RedirectToAction("Index", "Default");
             }
-            return View();
+            
         }
 
         public ActionResult ListTargets()

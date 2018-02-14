@@ -25,6 +25,15 @@ namespace RaceListService.Controllers
             return View(vm);
         }
 
+        public ActionResult NewTarget(string distances)
+        {
+            //var all = db.runners;
+            //runnerListVM vm = new runnerListVM();
+            //vm.listOfRunners = runnerListVM.buildVM(all).ToList();
+            //vm.SelectedRunnerIDs = runnerListVM.buildSelectedList(vm.listOfRunners);
+            return View();
+        }
+
         // GET: RaceRunners/Details/5
         public ActionResult Details(int? id)
         {

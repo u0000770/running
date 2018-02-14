@@ -203,7 +203,9 @@
     </Compile>
     <Compile Include="Models\memberDetailVM.cs" />
     <Compile Include="Models\mlvm.cs" />
+    <Compile Include="Models\nextRaceVM.cs" />
     <Compile Include="Models\predictTimeVM.cs" />
+    <Compile Include="Models\RaceCalc.cs" />
     <Compile Include="Models\Racedetails.cs" />
     <Compile Include="Models\runnerListVM.cs" />
     <Compile Include="Models\selectRaceVM.cs" />
@@ -305,6 +307,7 @@
     <Content Include="Views\NextRaces\Details.cshtml" />
     <Content Include="Views\NextRaces\Edit.cshtml" />
     <Content Include="Views\NextRaces\Index.cshtml" />
+    <Content Include="Views\NextRaces\NewTarget.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

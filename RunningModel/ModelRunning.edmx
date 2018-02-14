@@ -74,17 +74,11 @@
           <Property Name="Distance" Type="float" />
           <Property Name="Time" Type="int" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'rrcmlist.dbo.NextRace' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="NextRace">
           <Key>
             <PropertyRef Name="EFKey" />
-            <PropertyRef Name="RunnerId" />
-            <PropertyRef Name="Distance" />
-            <PropertyRef Name="Time" />
-            <PropertyRef Name="Active" />
           </Key>
-          <Property Name="EFKey" Type="int" Nullable="false" />
+          <Property Name="EFKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RunnerId" Type="int" Nullable="false" />
           <Property Name="Distance" Type="float" Nullable="false" />
           <Property Name="Time" Type="int" Nullable="false" />
@@ -180,17 +174,9 @@ warning 6002: The table/view 'rrcmlist.dbo.NextRace' does not have a primary key
           <EntitySet Name="Events" EntityType="Self.Events" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LastRace" EntityType="Self.LastRace" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="memberList" EntityType="Self.memberList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NextRace" EntityType="Self.NextRace" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="race" EntityType="Self.race" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="runners" EntityType="Self.runners" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="NextRace" EntityType="Self.NextRace" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [NextRace].[EFKey] AS [EFKey], 
-    [NextRace].[RunnerId] AS [RunnerId], 
-    [NextRace].[Distance] AS [Distance], 
-    [NextRace].[Time] AS [Time], 
-    [NextRace].[Active] AS [Active]
-    FROM [dbo].[NextRace] AS [NextRace]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_EventRunnerTimes_Events" Association="Self.FK_EventRunnerTimes_Events">
             <End Role="Events" EntitySet="Events" />
             <End Role="EventRunnerTimes" EntitySet="EventRunnerTimes" />
@@ -399,12 +385,8 @@ warning 6002: The table/view 'rrcmlist.dbo.NextRace' does not have a primary key
         <EntityType Name="NextRace">
           <Key>
             <PropertyRef Name="EFKey" />
-            <PropertyRef Name="RunnerId" />
-            <PropertyRef Name="Distance" />
-            <PropertyRef Name="Time" />
-            <PropertyRef Name="Active" />
           </Key>
-          <Property Name="EFKey" Type="Int32" Nullable="false" />
+          <Property Name="EFKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RunnerId" Type="Int32" Nullable="false" />
           <Property Name="Distance" Type="Double" Nullable="false" />
           <Property Name="Time" Type="Int32" Nullable="false" />

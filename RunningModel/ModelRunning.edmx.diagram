@@ -18,7 +18,7 @@
         <AssociationConnector Association="RunningModel.FK_EventRunnerTimes_runners" />
         <EntityTypeShape EntityType="RunningModel.LastRace" Width="1.5" PointX="7" PointY="4.125" />
         <AssociationConnector Association="RunningModel.FK_LastRace_runners" />
-        <EntityTypeShape EntityType="RunningModel.NextRace" Width="1.5" PointX="3.375" PointY="7.75" />
+        <EntityTypeShape EntityType="RunningModel.NextRace" Width="1.5" PointX="7" PointY="7.25" />
         <AssociationConnector Association="RunningModel.FK_NextRace_runners" />
       </Diagram>
     </edmx:Diagrams>

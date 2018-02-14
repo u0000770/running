@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RunningModel.NextRace>
+﻿@model IEnumerable<RaceListService.Models.nextRaceVM>
 
 @{
     ViewBag.Title = "Index";
@@ -7,7 +7,7 @@
 
 <h2>Index</h2>
 
-@using (Html.BeginForm("NewTarget", "NextRace", FormMethod.Post))
+@using (Html.BeginForm("NewTarget", "NextRaces", FormMethod.Post))
 {
     <fieldset>
         <legend>Update Distance currently set at @ViewBag.targetdistance</legend>
@@ -22,23 +22,33 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.runner.firstname)
+            @Html.DisplayNameFor(model => model.RunnerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastDistance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastTime)
         </th>
         <th></th>
     </tr>
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.runner.firstname)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RunnerName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastDistance)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastTime)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new {  id=item.RunnerId  })
+        </td>
+    </tr>
     }
 
 </table>
