@@ -116,10 +116,41 @@ namespace RaceListService.Controllers
 
             }
 
+        private List<SelectListItem> buildSelectList(IEnumerable<distance> inList, double targetdistance)
+        {
+            List<SelectListItem> slist = new List<SelectListItem>();
+
+            foreach (var item in inList)
+            {
+                if (item.Value == targetdistance)
+                {
+                    var option = new SelectListItem()
+                    {
+                        Text = item.Code,
+                        Value = item.Value.ToString(),
+                        Selected = true
+                    };
+                    slist.Add(option);
+                }
+                else
+                {
+                    var option = new SelectListItem()
+                    {
+                        Text = item.Code,
+                        Value = item.Value.ToString(),
+                    };
+                    slist.Add(option);
+                }
+                
+
+            }
+            return slist;
+        }
 
 
-            // GET: NextRaces/Details/5
-            public ActionResult Details(int? id)
+
+        // GET: NextRaces/Details/5
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -163,7 +194,7 @@ namespace RaceListService.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index", "NextRaces");
             }
             LastRace Race = db.LastRaces.SingleOrDefault(r => r.RunnerId == id);
             if (Race == null)
@@ -171,7 +202,7 @@ namespace RaceListService.Controllers
                 return RedirectToAction("Index", "NextRaces");
             }
             var distances = db.distances;
-            ViewBag.distances = buildSelectList(distances);
+            ViewBag.distances = buildSelectList(distances, Race.Distance);
             return View(Race);
         }
 

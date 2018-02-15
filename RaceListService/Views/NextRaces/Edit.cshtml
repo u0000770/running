@@ -18,9 +18,9 @@
         @Html.HiddenFor(model => model.EFKey)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.RunnerId, "RunnerId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.RunnerId, "distances", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("RunnerId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("distances", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.RunnerId, "", new { @class = "text-danger" })
             </div>
         </div>
