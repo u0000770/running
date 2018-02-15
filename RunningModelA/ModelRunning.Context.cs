@@ -7,16 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AZModel
+namespace RunningModelA
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class RunningEntities : DbContext
+    public partial class RunningModelEntities : DbContext
     {
-        public RunningEntities()
-            : base("name=RunningEntities")
+        public RunningModelEntities()
+            : base("name=RunningModelEntities")
         {
         }
     
@@ -25,15 +25,15 @@ namespace AZModel
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Comp> Comps { get; set; }
         public virtual DbSet<Discipline> Disciplines { get; set; }
         public virtual DbSet<distance> distances { get; set; }
-        public virtual DbSet<memberList> memberLists { get; set; }
-        public virtual DbSet<race> races { get; set; }
-        public virtual DbSet<runner> runners { get; set; }
-        public virtual DbSet<Comp> Comps { get; set; }
         public virtual DbSet<EventRunnerTime> EventRunnerTimes { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<LastRace> LastRaces { get; set; }
+        public virtual DbSet<memberList> memberLists { get; set; }
         public virtual DbSet<NextRace> NextRaces { get; set; }
+        public virtual DbSet<race> races { get; set; }
+        public virtual DbSet<runner> runners { get; set; }
     }
 }

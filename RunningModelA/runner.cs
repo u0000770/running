@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AZModel
+namespace RunningModelA
 {
     using System;
     using System.Collections.Generic;

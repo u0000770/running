@@ -11,6 +11,14 @@
         <EntityTypeShape EntityType="rundistanceModel.race" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="rundistanceModel.runner" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
         <AssociationConnector Association="rundistanceModel.FK_race_memberList" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="rundistanceModel.Comp" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="rundistanceModel.EventRunnerTime" Width="1.5" PointX="7.375" PointY="1" />
+        <EntityTypeShape EntityType="rundistanceModel.Event" Width="1.5" PointX="2.75" PointY="7.75" />
+        <EntityTypeShape EntityType="rundistanceModel.LastRace" Width="1.5" PointX="7.375" PointY="7.25" />
+        <EntityTypeShape EntityType="rundistanceModel.NextRace" Width="1.5" PointX="7.375" PointY="4.375" />
+        <AssociationConnector Association="rundistanceModel.FK_EventRunnerTimes_runners" />
+        <AssociationConnector Association="rundistanceModel.FK_LastRace_runners" />
+        <AssociationConnector Association="rundistanceModel.FK_NextRace_runners" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

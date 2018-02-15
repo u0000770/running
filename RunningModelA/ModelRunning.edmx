@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="rundistanceModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="RunningModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Comps">
           <Key>
             <PropertyRef Name="EFKey" />
@@ -153,7 +153,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="rundistanceModelStoreContainer">
+        <EntityContainer Name="RunningModelStoreContainer">
           <EntitySet Name="Comps" EntityType="Self.Comps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Discipline" EntityType="Self.Discipline" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="distance" EntityType="Self.distance" Schema="dbo" store:Type="Tables" />
@@ -181,10 +181,20 @@
             <End Role="race" EntitySet="race" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="rundistanceModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="RunningModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Comp">
+          <Key>
+            <PropertyRef Name="EFKey" />
+          </Key>
+          <Property Name="EFKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" />
+        </EntityType>
         <EntityType Name="Discipline">
           <Key>
             <PropertyRef Name="id" />
@@ -201,7 +211,42 @@
           <Property Name="EFKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Code" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Value" Type="Double" Nullable="false" />
+          <Property Name="Distance1" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EventRunnerTime">
+          <Key>
+            <PropertyRef Name="EFKey" />
+          </Key>
+          <Property Name="EFKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RunnerId" Type="Int32" Nullable="false" />
+          <Property Name="EventId" Type="Int32" Nullable="false" />
+          <Property Name="Target" Type="Int32" />
+          <Property Name="Actual" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="runner" Relationship="Self.FK_EventRunnerTimes_runners" FromRole="EventRunnerTimes" ToRole="runners" />
+        </EntityType>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="EFKey" />
+          </Key>
+          <Property Name="EFKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Venue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Discipline" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DistanceCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="LastRace">
+          <Key>
+            <PropertyRef Name="EFKey" />
+          </Key>
+          <Property Name="EFKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RunnerId" Type="Int32" Nullable="false" />
+          <Property Name="Distance" Type="Double" Nullable="false" />
+          <Property Name="Time" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="runner" Relationship="Self.FK_LastRace_runners" FromRole="LastRace" ToRole="runners" />
         </EntityType>
         <EntityType Name="memberList">
           <Key>
@@ -212,6 +257,17 @@
           <Property Name="Distance" Type="Double" />
           <Property Name="Time" Type="Int32" Nullable="false" />
           <NavigationProperty Name="races" Relationship="Self.FK_race_memberList" FromRole="memberList" ToRole="race" />
+        </EntityType>
+        <EntityType Name="NextRace">
+          <Key>
+            <PropertyRef Name="EFKey" />
+          </Key>
+          <Property Name="EFKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RunnerId" Type="Int32" Nullable="false" />
+          <Property Name="Distance" Type="Double" Nullable="false" />
+          <Property Name="Time" Type="Int32" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="runner" Relationship="Self.FK_NextRace_runners" FromRole="NextRace" ToRole="runners" />
         </EntityType>
         <EntityType Name="race">
           <Key>
@@ -234,10 +290,34 @@
           <Property Name="dob" Type="DateTime" Precision="0" />
           <Property Name="email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="Boolean" />
-          <NavigationProperty Name="EventRunnerTimes" Relationship="rundistanceModel.FK_EventRunnerTimes_runners" FromRole="runner" ToRole="EventRunnerTime" />
-          <NavigationProperty Name="LastRaces" Relationship="rundistanceModel.FK_LastRace_runners" FromRole="runner" ToRole="LastRace" />
-          <NavigationProperty Name="NextRaces" Relationship="rundistanceModel.FK_NextRace_runners" FromRole="runner" ToRole="NextRace" />
+          <NavigationProperty Name="EventRunnerTimes" Relationship="Self.FK_EventRunnerTimes_runners" FromRole="runners" ToRole="EventRunnerTimes" />
+          <NavigationProperty Name="LastRaces" Relationship="Self.FK_LastRace_runners" FromRole="runners" ToRole="LastRace" />
+          <NavigationProperty Name="NextRaces" Relationship="Self.FK_NextRace_runners" FromRole="runners" ToRole="NextRace" />
         </EntityType>
+        <Association Name="FK_EventRunnerTimes_runners">
+          <End Role="runners" Type="Self.runner" Multiplicity="1" />
+          <End Role="EventRunnerTimes" Type="Self.EventRunnerTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="runners">
+              <PropertyRef Name="EFKey" />
+            </Principal>
+            <Dependent Role="EventRunnerTimes">
+              <PropertyRef Name="RunnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LastRace_runners">
+          <End Role="runners" Type="Self.runner" Multiplicity="1" />
+          <End Role="LastRace" Type="Self.LastRace" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="runners">
+              <PropertyRef Name="EFKey" />
+            </Principal>
+            <Dependent Role="LastRace">
+              <PropertyRef Name="RunnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_race_memberList">
           <End Role="memberList" Type="Self.memberList" Multiplicity="1" />
           <End Role="race" Type="Self.race" Multiplicity="*" />
@@ -250,118 +330,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="RunningEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Disciplines" EntityType="Self.Discipline" />
-          <EntitySet Name="distances" EntityType="Self.distance" />
-          <EntitySet Name="memberLists" EntityType="Self.memberList" />
-          <EntitySet Name="races" EntityType="Self.race" />
-          <EntitySet Name="runners" EntityType="Self.runner" />
-          <AssociationSet Name="FK_race_memberList" Association="Self.FK_race_memberList">
-            <End Role="memberList" EntitySet="memberLists" />
-            <End Role="race" EntitySet="races" />
-          </AssociationSet>
-          <EntitySet Name="Comps" EntityType="rundistanceModel.Comp" />
-          <EntitySet Name="EventRunnerTimes" EntityType="rundistanceModel.EventRunnerTime" />
-          <EntitySet Name="Events" EntityType="rundistanceModel.Event" />
-          <EntitySet Name="LastRaces" EntityType="rundistanceModel.LastRace" />
-          <EntitySet Name="NextRaces" EntityType="rundistanceModel.NextRace" />
-          <AssociationSet Name="FK_EventRunnerTimes_runners" Association="rundistanceModel.FK_EventRunnerTimes_runners">
-            <End Role="runner" EntitySet="runners" />
-            <End Role="EventRunnerTime" EntitySet="EventRunnerTimes" />
-          </AssociationSet>
-          <AssociationSet Name="FK_LastRace_runners" Association="rundistanceModel.FK_LastRace_runners">
-            <End Role="runner" EntitySet="runners" />
-            <End Role="LastRace" EntitySet="LastRaces" />
-          </AssociationSet>
-          <AssociationSet Name="FK_NextRace_runners" Association="rundistanceModel.FK_NextRace_runners">
-            <End Role="runner" EntitySet="runners" />
-            <End Role="NextRace" EntitySet="NextRaces" />
-          </AssociationSet>
-        </EntityContainer>
-        <EntityType Name="Comp">
-          <Key>
-            <PropertyRef Name="EFKey" />
-          </Key>
-          <Property Name="EFKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Code" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Active" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="EventRunnerTime">
-          <Key>
-            <PropertyRef Name="EFKey" />
-          </Key>
-          <Property Name="EFKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RunnerId" Type="Int32" Nullable="false" />
-          <Property Name="EventId" Type="Int32" Nullable="false" />
-          <Property Name="Target" Type="Int32" />
-          <Property Name="Actual" Type="Int32" />
-          <Property Name="Date" Type="DateTime" Precision="3" />
-          <Property Name="Active" Type="Boolean" />
-          <NavigationProperty Name="runner" Relationship="rundistanceModel.FK_EventRunnerTimes_runners" FromRole="EventRunnerTime" ToRole="runner" />
-        </EntityType>
-        <EntityType Name="Event">
-          <Key>
-            <PropertyRef Name="EFKey" />
-          </Key>
-          <Property Name="EFKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Venue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Discipline" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DistanceCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Active" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="LastRace">
-          <Key>
-            <PropertyRef Name="EFKey" />
-          </Key>
-          <Property Name="EFKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RunnerId" Type="Int32" Nullable="false" />
-          <Property Name="Distance" Type="Double" Nullable="false" />
-          <Property Name="Time" Type="Int32" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="runner" Relationship="rundistanceModel.FK_LastRace_runners" FromRole="LastRace" ToRole="runner" />
-        </EntityType>
-        <EntityType Name="NextRace">
-          <Key>
-            <PropertyRef Name="EFKey" />
-          </Key>
-          <Property Name="EFKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RunnerId" Type="Int32" Nullable="false" />
-          <Property Name="Distance" Type="Double" Nullable="false" />
-          <Property Name="Time" Type="Int32" Nullable="false" />
-          <Property Name="Active" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="runner" Relationship="rundistanceModel.FK_NextRace_runners" FromRole="NextRace" ToRole="runner" />
-        </EntityType>
-        <Association Name="FK_EventRunnerTimes_runners">
-          <End Type="rundistanceModel.runner" Role="runner" Multiplicity="1" />
-          <End Type="rundistanceModel.EventRunnerTime" Role="EventRunnerTime" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="runner">
-              <PropertyRef Name="EFKey" />
-            </Principal>
-            <Dependent Role="EventRunnerTime">
-              <PropertyRef Name="RunnerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_LastRace_runners">
-          <End Type="rundistanceModel.runner" Role="runner" Multiplicity="1" />
-          <End Type="rundistanceModel.LastRace" Role="LastRace" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="runner">
-              <PropertyRef Name="EFKey" />
-            </Principal>
-            <Dependent Role="LastRace">
-              <PropertyRef Name="RunnerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_NextRace_runners">
-          <End Type="rundistanceModel.runner" Role="runner" Multiplicity="1" />
-          <End Type="rundistanceModel.NextRace" Role="NextRace" Multiplicity="*" />
+          <End Role="runners" Type="Self.runner" Multiplicity="1" />
+          <End Role="NextRace" Type="Self.NextRace" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="runner">
+            <Principal Role="runners">
               <PropertyRef Name="EFKey" />
             </Principal>
             <Dependent Role="NextRace">
@@ -369,14 +342,52 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityContainer Name="RunningModelEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Comps" EntityType="Self.Comp" />
+          <EntitySet Name="Disciplines" EntityType="Self.Discipline" />
+          <EntitySet Name="distances" EntityType="Self.distance" />
+          <EntitySet Name="EventRunnerTimes" EntityType="Self.EventRunnerTime" />
+          <EntitySet Name="Events" EntityType="Self.Event" />
+          <EntitySet Name="LastRaces" EntityType="Self.LastRace" />
+          <EntitySet Name="memberLists" EntityType="Self.memberList" />
+          <EntitySet Name="NextRaces" EntityType="Self.NextRace" />
+          <EntitySet Name="races" EntityType="Self.race" />
+          <EntitySet Name="runners" EntityType="Self.runner" />
+          <AssociationSet Name="FK_EventRunnerTimes_runners" Association="Self.FK_EventRunnerTimes_runners">
+            <End Role="runners" EntitySet="runners" />
+            <End Role="EventRunnerTimes" EntitySet="EventRunnerTimes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LastRace_runners" Association="Self.FK_LastRace_runners">
+            <End Role="runners" EntitySet="runners" />
+            <End Role="LastRace" EntitySet="LastRaces" />
+          </AssociationSet>
+          <AssociationSet Name="FK_race_memberList" Association="Self.FK_race_memberList">
+            <End Role="memberList" EntitySet="memberLists" />
+            <End Role="race" EntitySet="races" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NextRace_runners" Association="Self.FK_NextRace_runners">
+            <End Role="runners" EntitySet="runners" />
+            <End Role="NextRace" EntitySet="NextRaces" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="rundistanceModelStoreContainer" CdmEntityContainer="RunningEntities">
+        <EntityContainerMapping StorageEntityContainer="RunningModelStoreContainer" CdmEntityContainer="RunningModelEntities">
+          <EntitySetMapping Name="Comps">
+            <EntityTypeMapping TypeName="RunningModel.Comp">
+              <MappingFragment StoreEntitySet="Comps">
+                <ScalarProperty Name="EFKey" ColumnName="EFKey" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Disciplines">
-            <EntityTypeMapping TypeName="rundistanceModel.Discipline">
+            <EntityTypeMapping TypeName="RunningModel.Discipline">
               <MappingFragment StoreEntitySet="Discipline">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
@@ -386,17 +397,53 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="distances">
-            <EntityTypeMapping TypeName="rundistanceModel.distance">
+            <EntityTypeMapping TypeName="RunningModel.distance">
               <MappingFragment StoreEntitySet="distance">
                 <ScalarProperty Name="EFKey" ColumnName="EFKey" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Value" ColumnName="Distance" />
+                <ScalarProperty Name="Distance1" ColumnName="Distance" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EventRunnerTimes">
+            <EntityTypeMapping TypeName="RunningModel.EventRunnerTime">
+              <MappingFragment StoreEntitySet="EventRunnerTimes">
+                <ScalarProperty Name="EFKey" ColumnName="EFKey" />
+                <ScalarProperty Name="RunnerId" ColumnName="RunnerId" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="Target" ColumnName="Target" />
+                <ScalarProperty Name="Actual" ColumnName="Actual" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Events">
+            <EntityTypeMapping TypeName="RunningModel.Event">
+              <MappingFragment StoreEntitySet="Events">
+                <ScalarProperty Name="EFKey" ColumnName="EFKey" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Venue" ColumnName="Venue" />
+                <ScalarProperty Name="Discipline" ColumnName="Discipline" />
+                <ScalarProperty Name="DistanceCode" ColumnName="DistanceCode" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LastRaces">
+            <EntityTypeMapping TypeName="RunningModel.LastRace">
+              <MappingFragment StoreEntitySet="LastRace">
+                <ScalarProperty Name="EFKey" ColumnName="EFKey" />
+                <ScalarProperty Name="RunnerId" ColumnName="RunnerId" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="memberLists">
-            <EntityTypeMapping TypeName="rundistanceModel.memberList">
+            <EntityTypeMapping TypeName="RunningModel.memberList">
               <MappingFragment StoreEntitySet="memberList">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -405,8 +452,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="NextRaces">
+            <EntityTypeMapping TypeName="RunningModel.NextRace">
+              <MappingFragment StoreEntitySet="NextRace">
+                <ScalarProperty Name="EFKey" ColumnName="EFKey" />
+                <ScalarProperty Name="RunnerId" ColumnName="RunnerId" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="races">
-            <EntityTypeMapping TypeName="rundistanceModel.race">
+            <EntityTypeMapping TypeName="RunningModel.race">
               <MappingFragment StoreEntitySet="race">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="distance" ColumnName="distance" />
@@ -416,7 +474,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="runners">
-            <EntityTypeMapping TypeName="rundistanceModel.runner">
+            <EntityTypeMapping TypeName="RunningModel.runner">
               <MappingFragment StoreEntitySet="runners">
                 <ScalarProperty Name="EFKey" ColumnName="EFKey" />
                 <ScalarProperty Name="firstname" ColumnName="firstname" />
@@ -425,63 +483,6 @@
                 <ScalarProperty Name="dob" ColumnName="dob" />
                 <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Comps">
-            <EntityTypeMapping TypeName="rundistanceModel.Comp">
-              <MappingFragment StoreEntitySet="Comps">
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="EFKey" ColumnName="EFKey" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="EventRunnerTimes">
-            <EntityTypeMapping TypeName="rundistanceModel.EventRunnerTime">
-              <MappingFragment StoreEntitySet="EventRunnerTimes">
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Actual" ColumnName="Actual" />
-                <ScalarProperty Name="Target" ColumnName="Target" />
-                <ScalarProperty Name="EventId" ColumnName="EventId" />
-                <ScalarProperty Name="RunnerId" ColumnName="RunnerId" />
-                <ScalarProperty Name="EFKey" ColumnName="EFKey" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Events">
-            <EntityTypeMapping TypeName="rundistanceModel.Event">
-              <MappingFragment StoreEntitySet="Events">
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="DistanceCode" ColumnName="DistanceCode" />
-                <ScalarProperty Name="Discipline" ColumnName="Discipline" />
-                <ScalarProperty Name="Venue" ColumnName="Venue" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="EFKey" ColumnName="EFKey" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="LastRaces">
-            <EntityTypeMapping TypeName="rundistanceModel.LastRace">
-              <MappingFragment StoreEntitySet="LastRace">
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Time" ColumnName="Time" />
-                <ScalarProperty Name="Distance" ColumnName="Distance" />
-                <ScalarProperty Name="RunnerId" ColumnName="RunnerId" />
-                <ScalarProperty Name="EFKey" ColumnName="EFKey" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="NextRaces">
-            <EntityTypeMapping TypeName="rundistanceModel.NextRace">
-              <MappingFragment StoreEntitySet="NextRace">
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="Time" ColumnName="Time" />
-                <ScalarProperty Name="Distance" ColumnName="Distance" />
-                <ScalarProperty Name="RunnerId" ColumnName="RunnerId" />
-                <ScalarProperty Name="EFKey" ColumnName="EFKey" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

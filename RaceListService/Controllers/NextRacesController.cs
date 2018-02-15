@@ -23,7 +23,8 @@ namespace RaceListService.Controllers
             var distances = db.distances;
             var list = distances.ToList();
             ViewBag.distances = buildSelectList(distances);
-            var allRunners = db.runners.Include(n => n.LastRaces);
+            // var allRunners = db.runners.Include(n => n.LastRaces).OrderBy(n =>n.secondname);
+            var allRunners = db.runners.OrderBy(n => n.secondname);
             List<nextRaceVM> vm = new List<nextRaceVM>();
             foreach (var m in allRunners)
             {
