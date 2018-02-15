@@ -8,10 +8,14 @@ namespace RaceListService.Models
 {
     public class EditLastRaceVM
     {
-        private LastRace race;
+        
 
 
         public int? sTime;
+        public int RunnerId { get; set; }
+        public double Lastdistance { get; set; }
+        public System.DateTime Date { get; set; }
+
         public TimeSpan RaceTimeSpan
         {
 
@@ -28,10 +32,17 @@ namespace RaceListService.Models
             }
         }
 
+        public EditLastRaceVM()
+        {
+
+        }
+
         public EditLastRaceVM(LastRace race)
         {
-            this.race = race;
+            this.Date = race.Date;
+            this.sTime = race.Time;
+            this.Lastdistance = race.Distance;
+            this.RunnerId = race.RunnerId;
         }
     }
-}
 }
