@@ -7,7 +7,7 @@ namespace RaceListService.Models
 {
     public class RaceCalc
     {
-
+        
 
         public static string formatTime(int result)
         {

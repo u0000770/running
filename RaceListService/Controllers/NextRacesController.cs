@@ -203,7 +203,8 @@ namespace RaceListService.Controllers
             }
             var distances = db.distances;
             ViewBag.distances = buildSelectList(distances, Race.Distance);
-            return View(Race);
+            var vm = new EditLastRaceVM(Race);
+            return View(vm);
         }
 
         // POST: NextRaces/Edit/5
@@ -258,4 +259,5 @@ namespace RaceListService.Controllers
             base.Dispose(disposing);
         }
     }
-}
+
+    
