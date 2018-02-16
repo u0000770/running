@@ -191,6 +191,7 @@
     <Compile Include="Controllers\DisciplinesController.cs" />
     <Compile Include="Controllers\EventRunnerTimesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ManageRaceController.cs" />
     <Compile Include="Controllers\memberListsController.cs" />
     <Compile Include="Controllers\NextRacesController.cs" />
     <Compile Include="Controllers\racedistancesController.cs" />
@@ -309,6 +310,12 @@
     <Content Include="Views\NextRaces\Edit.cshtml" />
     <Content Include="Views\NextRaces\Index.cshtml" />
     <Content Include="Views\NextRaces\NewTarget.cshtml" />
+    <Content Include="Views\ManageRace\Create.cshtml" />
+    <Content Include="Views\ManageRace\Delete.cshtml" />
+    <Content Include="Views\ManageRace\Details.cshtml" />
+    <Content Include="Views\ManageRace\Edit.cshtml" />
+    <Content Include="Views\ManageRace\Index.cshtml" />
+    <Content Include="Views\ManageRace\NewTarget.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -349,7 +356,9 @@
       <Name>RunningModel</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\Empty\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

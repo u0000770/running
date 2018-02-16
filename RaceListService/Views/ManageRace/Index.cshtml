@@ -1,0 +1,54 @@
+﻿@model IEnumerable<RaceListService.Models.nextRaceVM>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+@using (Html.BeginForm("NewTarget", "ManageRace", FormMethod.Post))
+{
+    <fieldset>
+        <legend>Update Distance currently set at @ViewBag.targetdistance</legend>
+        <div class="form-group">
+            Select Target Distance :   @Html.DropDownList("distances")
+        </div>
+        <div class="form-group">
+            <input type="submit" name="calcTime" value="UPDATE" />
+        </div>
+    </fieldset>
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RunnerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastDistance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastTime)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RunnerName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastDistance)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastTime)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new {  id=item.RunnerId  })
+        </td>
+    </tr>
+    }
+
+</table>

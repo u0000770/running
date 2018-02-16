@@ -40,7 +40,7 @@ namespace RaceListService.Controllers
         public ActionResult Create()
         {
             ViewBag.EventId = new SelectList(db.Events, "EFKey", "Title");
-            ViewBag.RunnerId = new SelectList(db.runners, "EFKey", "firstname");
+            ViewBag.RunnerId = new SelectList(db.runners, "EFKey", "secondname");
             return View();
         }
 

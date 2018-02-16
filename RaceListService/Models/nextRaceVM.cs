@@ -19,4 +19,22 @@ namespace RaceListService.Models
         [Display(Name = "Previous Time")]
         public string LastTime { get; set; }
     }
+
+    public class RaceListItemVM
+    {
+        public int RunnerId { get; set; }
+        [Display(Name = "Name")]
+        public string RunnerName { get; set; }
+        public double CurrentDistance { get; set; }
+        [Display(Name = "Predicted Time")]
+        public string PredictedTime { get; set; }
+        [Display(Name = "Based upon Last Distance")]
+        public string LastDistance { get; set; }
+        [Display(Name = "Previous Time")]
+        public string LastTime { get; set; }
+        [Display(Name = "Actual Time")]
+        public string ActualTime { get; set; }
+    }
+
+
 }
