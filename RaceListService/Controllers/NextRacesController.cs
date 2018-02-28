@@ -20,9 +20,8 @@ namespace RaceListService.Controllers
         // GET: NextRaces
         public ActionResult Index()
         {
-            var distances = db.distances;
-            var list = distances.ToList();
-            ViewBag.distances = buildSelectList(distances);
+            var eventList = db.Events;
+            ViewBag.distanceList = buildSelectList(eventList);
             // var allRunners = db.runners.Include(n => n.LastRaces).OrderBy(n =>n.secondname);
             var allRunners = db.runners.OrderBy(n => n.secondname);
             List<nextRaceVM> vm = new List<nextRaceVM>();
@@ -43,8 +42,10 @@ namespace RaceListService.Controllers
             return View(vm);
         }
 
-        public ActionResult NewTarget(string distances)
+        public ActionResult NewTarget(string distanceList)
         {
+            var dCode = db.Events.Find(Convert.ToInt32(distanceList)).DistanceCode;
+            var distances = db.distances.SingleOrDefault(d => d.Code == dCode).Value;
             db.NextRaces.RemoveRange(db.NextRaces);
             var allRunners = db.runners.Include(n => n.LastRaces);
             // foreach runner 
@@ -116,6 +117,37 @@ namespace RaceListService.Controllers
             }
             return slist;
 
+        }
+
+        private List<SelectListItem> buildSelectList(IEnumerable<Event> inList, string currentEvent)
+        {
+            List<SelectListItem> slist = new List<SelectListItem>();
+
+            foreach (var item in inList)
+            {
+                if (item.EFKey == Convert.ToInt32(currentEvent))
+                {
+                    var option = new SelectListItem()
+                    {
+                        Text = item.Title,
+                        Value = item.EFKey.ToString(),
+                        Selected = true
+                    };
+                    slist.Add(option);
+                }
+                else
+                {
+                    var option = new SelectListItem()
+                    {
+                        Text = item.Title,
+                        Value = item.EFKey.ToString(),
+                    };
+                    slist.Add(option);
+                }
+                
+
+            }
+            return slist;
         }
 
         private List<SelectListItem> buildSelectList(IEnumerable<distance> inList)
