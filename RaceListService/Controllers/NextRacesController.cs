@@ -88,6 +88,36 @@ namespace RaceListService.Controllers
             return View(vm);
         }
 
+
+        private List<SelectListItem> buildSelectList(IEnumerable<Event> inList)
+        {
+            List<SelectListItem> slist = new List<SelectListItem>();
+
+            foreach (var item in inList)
+            {
+                //if (item.Value == targetdistance)
+                //{
+                //    var option = new SelectListItem()
+                //    {
+                //        Text = item.Code,
+                //        Value = item.Value.ToString(),
+                //        Selected = true
+                //    };
+                //    slist.Add(option);
+                //}
+                //else
+                //{
+                var option = new SelectListItem()
+                {
+                    Text = item.Title,
+                    Value = item.EFKey.ToString(),
+                };
+                slist.Add(option);
+            }
+            return slist;
+
+        }
+
         private List<SelectListItem> buildSelectList(IEnumerable<distance> inList)
         {
             List<SelectListItem> slist = new List<SelectListItem>();
@@ -202,8 +232,8 @@ namespace RaceListService.Controllers
             {
                 return RedirectToAction("Index", "NextRaces");
             }
-            var distances = db.distances;
-            ViewBag.distanceList = buildSelectList(distances, Race.Distance);
+            var eventList = db.Events;
+            ViewBag.distanceList = buildSelectList(eventList);
             var vm = new EditLastRaceVM(Race);
             return View(vm);
         }
@@ -215,11 +245,31 @@ namespace RaceListService.Controllers
         public ActionResult Edit(string distanceList, EditLastRaceVM vm)
         {
             var runner = db.runners.SingleOrDefault(r => r.EFKey == vm.RunnerId);
+            var thisEvent = db.Events.Find(Convert.ToInt32(distanceList));
+            var selectedDistance = db.distances.SingleOrDefault(d => d.Code == thisEvent.DistanceCode).Value;
+
+            var nextRace = new EventRunnerTime();
+            nextRace.EventId = thisEvent.EFKey;
+            nextRace.RunnerId = runner.EFKey;
+            nextRace.Actual = Convert.ToInt32(vm.RaceTimeSpan.TotalSeconds);
+            nextRace.Date = DateTime.Now;
+
             var lastRace = db.LastRaces.SingleOrDefault(l => l.RunnerId == runner.EFKey);
-            lastRace.Distance = Convert.ToDouble(distanceList);
+            lastRace.Distance = selectedDistance;
             lastRace.Time = Convert.ToInt32(vm.RaceTimeSpan.TotalSeconds);
             lastRace.Date = DateTime.Now;
+
             try {
+                var ert = db.EventRunnerTimes.SingleOrDefault(rt => rt.EventId == nextRace.EventId && rt.RunnerId == nextRace.RunnerId);
+                if (ert == null)
+                {
+                    db.EventRunnerTimes.Add(nextRace);
+                }
+                else
+                {
+                    ert.Actual = nextRace.Actual;
+                    db.Entry(lastRace).State = EntityState.Modified;
+                }
                 db.Entry(lastRace).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index", "NextRaces");
@@ -231,8 +281,8 @@ namespace RaceListService.Controllers
                 {
                     return RedirectToAction("Index", "NextRaces");
                 }
-                var distances = db.distances;
-                ViewBag.distanceList = buildSelectList(distances, Race.Distance);
+                var eventList = db.Events;
+                ViewBag.distanceList = buildSelectList(eventList);
                 var nvm = new EditLastRaceVM(Race);
                 return View(nvm);
             }
