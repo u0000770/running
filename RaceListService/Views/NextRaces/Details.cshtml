@@ -1,27 +1,56 @@
-﻿@model RunningModel.NextRace
+﻿@model RaceListService.Models.memberRaceDetailVM
 
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>Your Race Details</h2>
 
-<div>
-    <h4>NextRace</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.runner.firstname)
-        </dt>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lastRaceDistance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lastRaceTitle)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lastRaceTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lastRaceDate)
+        </th>
+        <th></th>
+    </tr>
 
-        <dd>
-            @Html.DisplayFor(model => model.runner.firstname)
-        </dd>
+@foreach (var item in Model.listOfRaces) {
+    <tr>
 
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceTitle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceDistance)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceTargetTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceActualTime)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

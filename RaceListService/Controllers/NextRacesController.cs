@@ -17,8 +17,6 @@ namespace RaceListService.Controllers
     {
         private RunningModelEntities db = new RunningModelEntities();
 
-
-
         // GET: NextRaces
         public ActionResult Index()
         {
@@ -248,12 +246,39 @@ namespace RaceListService.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            NextRace nextRace = db.NextRaces.Find(id);
-            if (nextRace == null)
+            runner thisRunner = db.runners.Find(id);
+            if (thisRunner == null)
             {
                 return HttpNotFound();
             }
-            return View(nextRace);
+            var vm = new memberRaceDetailVM();
+            vm.RunnerId = Convert.ToInt32(id);
+            var lastRace = db.LastRaces.SingleOrDefault(r => r.RunnerId == vm.RunnerId);
+            if (lastRace != null)
+            {
+                vm.lastRaceId = lastRace.RunnerId;
+                vm.lastRaceTime = EventRaceTimesVM.formatResult(lastRace.Time);
+                vm.lastRaceDistance = db.distances.Single(d => d.Value == lastRace.Distance).Name;
+                vm.lastRaceDate = lastRace.Date;
+            }
+            List<EventRaceTimesVM> listOfRacesVM = new List<EventRaceTimesVM>();
+            var listOfRace = db.EventRunnerTimes.Where(r => r.RunnerId == thisRunner.EFKey);
+            foreach(var race in listOfRace)
+            {
+                EventRaceTimesVM ert = new EventRaceTimesVM();
+                ert.RaceId = race.EventId;
+                ert.RaceDistance = db.distances.SingleOrDefault(d => d.Code == race.Event.DistanceCode).Name;
+                ert.RaceTitle = race.Event.Title;
+                ert.RaceDate = (DateTime)race.Date;
+                int x = race.Actual ?? 0;
+                ert.RaceActualTime = EventRaceTimesVM.formatResult(x);
+                int y = race.Target ?? 0;
+                ert.RaceTargetTime = EventRaceTimesVM.formatResult(y);
+                listOfRacesVM.Add(ert);
+            }
+
+            vm.listOfRaces = listOfRacesVM.OrderBy(r => r.RaceDate).ToList();
+            return View(vm);
         }
 
         // GET: NextRaces/Create

@@ -203,6 +203,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\EditLastRaceVM.cs" />
+    <Compile Include="Models\memberRaceDetailVM.cs" />
     <Compile Include="Models\memberDetailVM.cs" />
     <Compile Include="Models\mlvm.cs" />
     <Compile Include="Models\nextRaceVM.cs" />

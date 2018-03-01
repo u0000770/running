@@ -35,6 +35,7 @@
             @Html.DisplayNameFor(model => model.LastTime)
         </th>
         <th></th>
+        <th></th>
     </tr>
 
     @foreach (var item in Model)
@@ -50,7 +51,10 @@
             @Html.DisplayFor(modelItem => item.LastTime)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new {  id=item.RunnerId  })
+            @Html.ActionLink("Edit", "Edit", new { id = item.RunnerId })
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { id = item.RunnerId })
         </td>
     </tr>
     }
