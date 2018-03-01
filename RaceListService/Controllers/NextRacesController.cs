@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using RaceListService.Models;
 using RunningModel;
 
+
+// TODO: List Specific Runners EventRaceTimes
 namespace RaceListService.Controllers
 {
     public class NextRacesController : Controller
@@ -42,21 +44,44 @@ namespace RaceListService.Controllers
             return View(vm);
         }
 
-        public ActionResult NewTarget(string distanceList)
+        [HttpPost]
+        public ActionResult NewTarget(DateTime? raceDate, string distanceList)
         {
-            var dCode = db.Events.Find(Convert.ToInt32(distanceList)).DistanceCode;
+
+            var thisEvent = db.Events.Find(Convert.ToInt32(distanceList));
+            var dCode = thisEvent.DistanceCode;
             var distances = db.distances.SingleOrDefault(d => d.Code == dCode).Value;
             db.NextRaces.RemoveRange(db.NextRaces);
             var allRunners = db.runners.Include(n => n.LastRaces);
             // foreach runner 
             foreach (var r in allRunners)
             {
+                
                 var lastRace = r.LastRaces.FirstOrDefault(s => s.RunnerId == r.EFKey);
                 if (lastRace != null)
                 {
                     var oldDistance = lastRace.Distance;
                     var oldtime = lastRace.Time;
-                    var predictedTime = (RaceCalc.calcPredictedTime(oldDistance, Convert.ToDouble(distances), oldtime) + RaceCalc.cameron(oldDistance, Convert.ToDouble(distances), oldtime)) / 2;
+                    double predictedTime = CalculatePredicion(distances, oldDistance, oldtime);
+
+                    var nextRaceEvent = new EventRunnerTime();
+                    nextRaceEvent.EventId = thisEvent.EFKey;
+                    nextRaceEvent.RunnerId = r.EFKey;
+                    nextRaceEvent.Date = raceDate;
+                    nextRaceEvent.Target = Convert.ToInt32(predictedTime);
+
+                    var ert = db.EventRunnerTimes.SingleOrDefault(rt => rt.EventId == nextRaceEvent.EventId && rt.RunnerId == nextRaceEvent.RunnerId && rt.Date == nextRaceEvent.Date);
+                    if (ert == null)
+                    {
+                        db.EventRunnerTimes.Add(nextRaceEvent);
+                    }
+                    else
+                    {
+                        db.Entry(lastRace).State = EntityState.Modified;
+                    }
+                    db.Entry(lastRace).State = EntityState.Modified;
+
+
                     RunningModel.NextRace nextrace = new NextRace();
                     nextrace.RunnerId = r.EFKey;
                     nextrace.Distance = Convert.ToDouble(distances);
@@ -89,6 +114,10 @@ namespace RaceListService.Controllers
             return View(vm);
         }
 
+        private static double CalculatePredicion(double distances, double oldDistance, int oldtime)
+        {
+            return (RaceCalc.calcPredictedTime(oldDistance, Convert.ToDouble(distances), oldtime) + RaceCalc.cameron(oldDistance, Convert.ToDouble(distances), oldtime)) / 2;
+        }
 
         private List<SelectListItem> buildSelectList(IEnumerable<Event> inList)
         {
