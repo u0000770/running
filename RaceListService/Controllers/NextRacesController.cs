@@ -49,35 +49,41 @@ namespace RaceListService.Controllers
             var thisEvent = db.Events.Find(Convert.ToInt32(distanceList));
             var dCode = thisEvent.DistanceCode;
             var distances = db.distances.SingleOrDefault(d => d.Code == dCode).Value;
-            db.NextRaces.RemoveRange(db.NextRaces);
-            var allRunners = db.runners.Include(n => n.LastRaces);
+            CleanNextRaces();
+            var allRunners = db.runners;
             // foreach runner 
             foreach (var r in allRunners)
             {
-                
+                /// get the last race for this runner
                 var lastRace = r.LastRaces.FirstOrDefault(s => s.RunnerId == r.EFKey);
                 if (lastRace != null)
                 {
+                    /// use the last race details to calculate time for next race
                     var oldDistance = lastRace.Distance;
                     var oldtime = lastRace.Time;
                     double predictedTime = CalculatePredicion(distances, oldDistance, oldtime);
 
-                    var nextRaceEvent = new EventRunnerTime();
-                    nextRaceEvent.EventId = thisEvent.EFKey;
-                    nextRaceEvent.RunnerId = r.EFKey;
-                    nextRaceEvent.Date = raceDate;
-                    nextRaceEvent.Target = Convert.ToInt32(predictedTime);
+                    /// create a nextRaceRunner
+                   
 
-                    var ert = db.EventRunnerTimes.SingleOrDefault(rt => rt.EventId == nextRaceEvent.EventId && rt.RunnerId == nextRaceEvent.RunnerId && rt.Date == nextRaceEvent.Date);
+
+                    /// need to check if this is an existing or new entry
+                    var ert = db.EventRunnerTimes.SingleOrDefault(rt => rt.EventId == thisEvent.EFKey && rt.RunnerId == r.EFKey && rt.Date == raceDate);
                     if (ert == null)
                     {
+                        var nextRaceEvent = new EventRunnerTime();
+                        nextRaceEvent.EventId = thisEvent.EFKey;
+                        nextRaceEvent.RunnerId = r.EFKey;
+                        nextRaceEvent.Date = raceDate;
+                        nextRaceEvent.Target = Convert.ToInt32(predictedTime);
                         db.EventRunnerTimes.Add(nextRaceEvent);
                     }
                     else
                     {
-                        db.Entry(lastRace).State = EntityState.Modified;
+                        ert.Target = Convert.ToInt32(predictedTime);
+                        db.Entry(ert).State = EntityState.Modified;
                     }
-                    db.Entry(lastRace).State = EntityState.Modified;
+                    //db.Entry(lastRace).State = EntityState.Modified;
 
 
                     RunningModel.NextRace nextrace = new NextRace();
@@ -110,6 +116,12 @@ namespace RaceListService.Controllers
             var ds = Convert.ToDouble(distances);
             ViewBag.NewDistance = db.distances.SingleOrDefault(d => d.Value == ds).Name;
             return View(vm);
+        }
+
+        private void CleanNextRaces()
+        {
+            db.NextRaces.RemoveRange(db.NextRaces);
+            db.SaveChanges();
         }
 
         private static double CalculatePredicion(double distances, double oldDistance, int oldtime)
@@ -259,14 +271,14 @@ namespace RaceListService.Controllers
                 vm.lastRaceId = lastRace.RunnerId;
                 vm.lastRaceTime = EventRaceTimesVM.formatResult(lastRace.Time);
                 vm.lastRaceDistance = db.distances.Single(d => d.Value == lastRace.Distance).Name;
-                vm.lastRaceDate = lastRace.Date;
+                vm.lastRaceDate = lastRace.Date.Date;
             }
             List<EventRaceTimesVM> listOfRacesVM = new List<EventRaceTimesVM>();
             var listOfRace = db.EventRunnerTimes.Where(r => r.RunnerId == thisRunner.EFKey);
             foreach(var race in listOfRace)
             {
                 EventRaceTimesVM ert = new EventRaceTimesVM();
-                ert.RaceId = race.EventId;
+                ert.RaceId = race.EFKey;
                 ert.RaceDistance = db.distances.SingleOrDefault(d => d.Code == race.Event.DistanceCode).Name;
                 ert.RaceTitle = race.Event.Title;
                 ert.RaceDate = (DateTime)race.Date;

@@ -5,52 +5,78 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Your Race Details</h2>
+<h4>&nbsp;</h4>
+<h4>Your Last JR Trophy Race Reference Time</h4>
+<hr />
+<dl>
+    <dt>
+        @Html.DisplayNameFor(model => model.lastRaceDate)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.lastRaceDate)</dd>
 
+    <dt>
+        @Html.DisplayNameFor(model => model.lastRaceDistance)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.lastRaceDistance)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.lastRaceTime)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.lastRaceTime)
+    </dd>
+</dl>
+<h4>&nbsp;</h4>
+<h4>All JR Races with Predicted Times / Actual Times</h4>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            Race
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.lastRaceDistance)
+            Distance
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.lastRaceTitle)
+            Date
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.lastRaceTime)
+            Target Time
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.lastRaceDate)
+            Actual Time
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model.listOfRaces) {
-    <tr>
+    @foreach (var item in Model.listOfRaces)
+    {
+        <tr>
 
-        <td>
-            @Html.DisplayFor(modelItem => item.RaceTitle)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RaceDistance)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RaceDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RaceTargetTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RaceActualTime)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
-    </tr>
-}
+            <td>
+                @Html.DisplayFor(modelItem => item.RaceTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaceDistance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaceDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaceTargetTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaceActualTime)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", "EventRunnerTimes", new { id = item.RaceId }, null)
+            </td>
+        </tr>
+    }
 
 </table>
+<hr />

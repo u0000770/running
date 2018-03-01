@@ -8,9 +8,6 @@ namespace RaceListService.Models
 {
     public class EditLastRaceVM
     {
-        
-
-
         public int? sTime;
         public int RunnerId { get; set; }
         public double Lastdistance { get; set; }

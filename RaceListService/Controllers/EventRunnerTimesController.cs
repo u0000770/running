@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using RaceListService.Models;
 using RunningModel;
 
 namespace RaceListService.Controllers
@@ -66,18 +67,26 @@ namespace RaceListService.Controllers
         // GET: EventRunnerTimes/Edit/5
         public ActionResult Edit(int? id)
         {
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             EventRunnerTime eventRunnerTime = db.EventRunnerTimes.Find(id);
+            EditEventRunnerTimeVM vm = new EditEventRunnerTimeVM();
             if (eventRunnerTime == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.EventId = new SelectList(db.Events, "EFKey", "Title", eventRunnerTime.EventId);
-            ViewBag.RunnerId = new SelectList(db.runners, "EFKey", "firstname", eventRunnerTime.RunnerId);
-            return View(eventRunnerTime);
+            var runner = db.runners.Find(eventRunnerTime.RunnerId);
+            vm.RaceDate = (DateTime)eventRunnerTime.Date;
+            vm.RaceTargetTime = EventRaceTimesVM.formatResult(Convert.ToInt32(eventRunnerTime.Target));
+            vm.RaceTitle = eventRunnerTime.Event.Title;
+            vm.RaceId = eventRunnerTime.EFKey;
+            vm.RaceActualTime = eventRunnerTime.Actual;
+            vm.RunnerName = runner.firstname + " " + runner.secondname;
+           // vm.RaceActualTime = eventRunnerTime.Actual;
+            return View(vm);
         }
 
         // POST: EventRunnerTimes/Edit/5
