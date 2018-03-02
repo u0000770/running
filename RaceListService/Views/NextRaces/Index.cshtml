@@ -5,58 +5,74 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Next Race Target Calculator</h2>
 
-@using (Html.BeginForm("NewTarget", "NextRaces", FormMethod.Post))
-{
-<fieldset>
-    <legend>Update Distance currently set at @ViewBag.targetdistance</legend>
-    <div class="form-group">
-        Select Target Distance :   @Html.DropDownList("distanceList")
-    </div>
-    <div class="form-group">
-        <label for="meeting">Race Date : </label>
-        <input name="raceDate" type="date"  />
-    </div>
-    <div class="form-group">
-        <input type="submit" name="calcTime" value="UPDATE" />
-    </div>
-</fieldset>
-}
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.RunnerName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastDistance)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastTime)
-        </th>
-        <th></th>
-        <th></th>
-    </tr>
+<div class="panel panel-default">
+    <div class="panel-body">
 
-    @foreach (var item in Model)
-    {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.RunnerName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastDistance)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastTime)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.RunnerId })
-        </td>
-        <td>
-            @Html.ActionLink("Details", "Details", new { id = item.RunnerId })
-        </td>
-    </tr>
-    }
 
-</table>
+        @using (Html.BeginForm("NewTarget", "NextRaces", FormMethod.Post))
+        {
+            <fieldset class="fieldset">
+                <legend>Update Next Race Target</legend>
+                <div class="form-group">
+                    <label for="distance">Select Target Distance : </label>
+                       @Html.DropDownList("distanceList")
+                </div>
+                <div class="form-group">
+                    <label for="meeting">Race Date : </label>
+                    <input name="raceDate" type="date" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" name="calcTime" value="Calculate" />
+                </div>
+            </fieldset>
+        }
+
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h3>List of Last Race Details</h3>
+        <p>This is the data that will be used in the calculation</p>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RunnerName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastDistance)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastTime)
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RunnerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastDistance)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastTime)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.RunnerId })
+                    </td>
+                    <td>
+                        @Html.ActionLink("Details", "Details", new { id = item.RunnerId })
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+        </div>
+    </div>

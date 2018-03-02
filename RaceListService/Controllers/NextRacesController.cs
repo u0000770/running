@@ -17,7 +17,7 @@ namespace RaceListService.Controllers
     {
         private RunningModelEntities db = new RunningModelEntities();
 
-        #region Display List of Last Races
+        #region Display List of Last Races and form to update next race
         /// <summary>
         /// Display a list of Last Races from LastRace collection for each runner
         /// </summary>
@@ -33,7 +33,7 @@ namespace RaceListService.Controllers
             List<nextRaceVM> vm = new List<nextRaceVM>();
             // construct the viewmodel - list of Last Races 
             BuildListofLastRaces(allRunners, vm);
-            return View(vm);
+            return View(vm.OrderBy(v => v.date).OrderBy(n => n.RunnerName));
         }
 
         private void BuildListofLastRaces(IOrderedQueryable<runner> allRunners, List<nextRaceVM> vm)
@@ -47,8 +47,9 @@ namespace RaceListService.Controllers
                     nr.RunnerId = m.EFKey;
                     nr.LastDistance = db.distances.SingleOrDefault(d => d.Value == last.Distance).Name;
                     nr.LastTime = RaceCalc.formatTime(last.Time);
-                    nr.RunnerName = m.firstname + " " + m.secondname;
+                    nr.RunnerName = m.secondname + " "  + m.firstname;
                     nr.Time = RaceCalc.formatTime(last.Time);
+                    nr.date = last.Date;
                     vm.Add(nr);
                 }
             }
@@ -388,7 +389,7 @@ namespace RaceListService.Controllers
         /// <param name="vm"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Edit(string distanceList, EditLastRaceVM vm)
+        public ActionResult Edit(string distanceList, EditLastRaceVM vm, DateTime? raceDate)
         {
             // get the runner
             var runner = db.runners.SingleOrDefault(r => r.EFKey == vm.RunnerId);
@@ -402,18 +403,18 @@ namespace RaceListService.Controllers
             nextRace.EventId = thisEvent.EFKey;
             nextRace.RunnerId = runner.EFKey;
             nextRace.Actual = Convert.ToInt32(vm.RaceTimeSpan.TotalSeconds);
-            nextRace.Date = DateTime.Now;
+            nextRace.Date = (DateTime)raceDate;
 
             // grab hold of this runners last race and update it
             var lastRace = db.LastRaces.SingleOrDefault(l => l.RunnerId == runner.EFKey);
             lastRace.Distance = selectedDistance;
             lastRace.Time = Convert.ToInt32(vm.RaceTimeSpan.TotalSeconds);
-            lastRace.Date = DateTime.Now;
+            lastRace.Date = (DateTime)raceDate;
             
             // update last race and event runner times 
             try {
                 // get an existing race if it exisits
-                var ert = db.EventRunnerTimes.SingleOrDefault(rt => rt.EventId == nextRace.EventId && rt.RunnerId == nextRace.RunnerId);
+                var ert = db.EventRunnerTimes.SingleOrDefault(rt => rt.EventId == nextRace.EventId && rt.RunnerId == nextRace.RunnerId && rt.Date == (DateTime)raceDate);
                 if (ert == null) // if not add it
                 {
                     db.EventRunnerTimes.Add(nextRace);

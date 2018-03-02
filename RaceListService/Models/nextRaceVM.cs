@@ -8,16 +8,17 @@ namespace RaceListService.Models
 {
     public class nextRaceVM
     {
-        public int RunnerId { get; set; } 
+        public int RunnerId { get; set; }
         [Display(Name = "Name")]
         public string RunnerName { get; set; }
         public double Distance { get; set; }
         [Display(Name = "Predicted Time")]
         public string Time { get; set; }
-        [Display(Name = "Based upon Last Distance")]
+        [Display(Name = "Distance of Last Race")]
         public string LastDistance { get; set; }
-        [Display(Name = "Previous Time")]
+        [Display(Name = "Actual Time of Last Race")]
         public string LastTime { get; set; }
+        public DateTime date {get;set; }
     }
 
     public class RaceListItemVM
