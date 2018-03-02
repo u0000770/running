@@ -61,7 +61,7 @@ namespace RaceListService.Controllers
         #region Update NextRace and EventRunnerTimes with new prediction
 
         /// <summary>
-        /// Updates NextRace and EventRunnerTimes with predicted time
+        /// Updates NextRace and EventRunnerTimes with predicted time when called by Index View Update Button 
         /// </summary>
         /// <param name="raceDate"></param>
         /// <param name="distanceList"></param>
@@ -293,6 +293,7 @@ namespace RaceListService.Controllers
         }
 
 
+        #region Display Last Race and list of EventRaceTimes for specific runner
 
         // GET: NextRaces/Details/5
         public ActionResult Details(int? id)
@@ -307,6 +308,20 @@ namespace RaceListService.Controllers
                 return HttpNotFound();
             }
             var vm = new memberRaceDetailVM();
+            BuildmemberRaceDetailVM(id, vm);
+
+            List<EventRaceTimesVM> listOfRacesVM = BuildEventRaceList(thisRunner);
+            vm.listOfRaces = listOfRacesVM.OrderBy(r => r.RaceDate).ToList();
+            return View(vm);
+        }
+
+        /// <summary>
+        /// Builds the Core VM for MemberRaceDetailVM
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="vm"></param>
+        private void BuildmemberRaceDetailVM(int? id, memberRaceDetailVM vm)
+        {
             vm.RunnerId = Convert.ToInt32(id);
             var lastRace = db.LastRaces.SingleOrDefault(r => r.RunnerId == vm.RunnerId);
             if (lastRace != null)
@@ -316,9 +331,18 @@ namespace RaceListService.Controllers
                 vm.lastRaceDistance = db.distances.Single(d => d.Value == lastRace.Distance).Name;
                 vm.lastRaceDate = lastRace.Date.Date;
             }
+        }
+
+        /// <summary>
+        /// Builds list of races from EventRunnerTimes for this runner
+        /// </summary>
+        /// <param name="thisRunner"></param>
+        /// <returns>List<EventRaceTimesVM></returns>
+        private List<EventRaceTimesVM> BuildEventRaceList(runner thisRunner)
+        {
             List<EventRaceTimesVM> listOfRacesVM = new List<EventRaceTimesVM>();
             var listOfRace = db.EventRunnerTimes.Where(r => r.RunnerId == thisRunner.EFKey);
-            foreach(var race in listOfRace)
+            foreach (var race in listOfRace)
             {
                 EventRaceTimesVM ert = new EventRaceTimesVM();
                 ert.RaceId = race.EFKey;
@@ -332,35 +356,12 @@ namespace RaceListService.Controllers
                 listOfRacesVM.Add(ert);
             }
 
-            vm.listOfRaces = listOfRacesVM.OrderBy(r => r.RaceDate).ToList();
-            return View(vm);
+            return listOfRacesVM;
         }
 
-        // GET: NextRaces/Create
-        public ActionResult Create()
-        {
-            ViewBag.RunnerId = new SelectList(db.runners, "EFKey", "firstname");
-            return View();
-        }
+        #endregion
 
-        // POST: NextRaces/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EFKey,RunnerId,Distance,Time,Active")] NextRace nextRace)
-        {
-            if (ModelState.IsValid)
-            {
-                db.NextRaces.Add(nextRace);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.RunnerId = new SelectList(db.runners, "EFKey", "firstname", nextRace.RunnerId);
-            return View(nextRace);
-        }
-
+        #region Edit Last Race for a specific runner
         // GET: NextRaces/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -379,34 +380,45 @@ namespace RaceListService.Controllers
             return View(vm);
         }
 
-        // POST: NextRaces/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // TO DO upate the UI and method so we can use a specified date
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="distanceList">This is An Event ID </param>
+        /// <param name="vm"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Edit(string distanceList, EditLastRaceVM vm)
         {
+            // get the runner
             var runner = db.runners.SingleOrDefault(r => r.EFKey == vm.RunnerId);
+            // get the event
             var thisEvent = db.Events.Find(Convert.ToInt32(distanceList));
+            // get the raw distance value for this event
             var selectedDistance = db.distances.SingleOrDefault(d => d.Code == thisEvent.DistanceCode).Value;
 
+            // create a new EventRunnerTime 
             var nextRace = new EventRunnerTime();
             nextRace.EventId = thisEvent.EFKey;
             nextRace.RunnerId = runner.EFKey;
             nextRace.Actual = Convert.ToInt32(vm.RaceTimeSpan.TotalSeconds);
             nextRace.Date = DateTime.Now;
 
+            // grab hold of this runners last race and update it
             var lastRace = db.LastRaces.SingleOrDefault(l => l.RunnerId == runner.EFKey);
             lastRace.Distance = selectedDistance;
             lastRace.Time = Convert.ToInt32(vm.RaceTimeSpan.TotalSeconds);
             lastRace.Date = DateTime.Now;
-
+            
+            // update last race and event runner times 
             try {
+                // get an existing race if it exisits
                 var ert = db.EventRunnerTimes.SingleOrDefault(rt => rt.EventId == nextRace.EventId && rt.RunnerId == nextRace.RunnerId);
-                if (ert == null)
+                if (ert == null) // if not add it
                 {
                     db.EventRunnerTimes.Add(nextRace);
                 }
-                else
+                else            // if it does exist update it
                 {
                     ert.Actual = nextRace.Actual;
                     db.Entry(lastRace).State = EntityState.Modified;
@@ -429,31 +441,7 @@ namespace RaceListService.Controllers
             }
         }
 
-        // GET: NextRaces/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            NextRace nextRace = db.NextRaces.Find(id);
-            if (nextRace == null)
-            {
-                return HttpNotFound();
-            }
-            return View(nextRace);
-        }
-
-        // POST: NextRaces/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            NextRace nextRace = db.NextRaces.Find(id);
-            db.NextRaces.Remove(nextRace);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+#endregion
 
         protected override void Dispose(bool disposing)
         {
