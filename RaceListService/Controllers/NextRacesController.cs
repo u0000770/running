@@ -86,7 +86,7 @@ namespace RaceListService.Controllers
             BuildNextRaceVM(allNextRaces, vm);
             var ds = Convert.ToDouble(distances);
             ViewBag.NewDistance = db.distances.SingleOrDefault(d => d.Value == ds).Name;
-            return View(vm);
+            return View(vm.OrderBy(r => r.RunnerName));
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace RaceListService.Controllers
                 var last = db.LastRaces.SingleOrDefault(l => l.RunnerId == m.RunnerId);
                 nr.LastDistance = db.distances.SingleOrDefault(d => d.Value == last.Distance).Name;
                 nr.LastTime = RaceCalc.formatTime(last.Time);
-                nr.RunnerName = m.runner.firstname + " " + m.runner.secondname;
+                nr.RunnerName = m.runner.secondname + " " + m.runner.firstname;
                 nr.Time = RaceCalc.formatTime(m.Time);
                 vm.Add(nr);
             }

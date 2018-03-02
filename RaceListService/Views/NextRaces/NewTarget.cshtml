@@ -5,43 +5,49 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>NewTarget</h2>
 
-<p>
-    Next Target Times for @ViewBag.NewDistance
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.RunnerName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Time)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastDistance)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastTime)
-        </th>
-        <th></th>
-    </tr>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h2>
+            Target Times for next @ViewBag.NewDistance race
+        </h2>
+    </div>
+    <div class="panel-body">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RunnerName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Time)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastDistance)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastTime)
+                </th>
+                <th></th>
+            </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.RunnerName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Time)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastDistance)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastTime)
-        </td>
-    </tr>
-}
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RunnerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastDistance)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastTime)
+                    </td>
+                </tr>
+            }
 
-</table>
+        </table>
+        </div>
+    </div>
