@@ -10,21 +10,34 @@ using RaceListService.Models;
 using RunningModel;
 
 
-// TODO: List Specific Runners EventRaceTimes
+
 namespace RaceListService.Controllers
 {
     public class NextRacesController : Controller
     {
         private RunningModelEntities db = new RunningModelEntities();
 
-        // GET: NextRaces
+        #region Display List of Last Races
+        /// <summary>
+        /// Display a list of Last Races from LastRace collection for each runner
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
+            // get all events
             var eventList = db.Events;
+            // build a list of events to select one from
             ViewBag.distanceList = buildSelectList(eventList);
-            // var allRunners = db.runners.Include(n => n.LastRaces).OrderBy(n =>n.secondname);
+            // get all runners
             var allRunners = db.runners.OrderBy(n => n.secondname);
             List<nextRaceVM> vm = new List<nextRaceVM>();
+            // construct the viewmodel - list of Last Races 
+            BuildListofLastRaces(allRunners, vm);
+            return View(vm);
+        }
+
+        private void BuildListofLastRaces(IOrderedQueryable<runner> allRunners, List<nextRaceVM> vm)
+        {
             foreach (var m in allRunners)
             {
                 var nr = new nextRaceVM();
@@ -39,9 +52,20 @@ namespace RaceListService.Controllers
                     vm.Add(nr);
                 }
             }
-            return View(vm);
         }
 
+
+        #endregion
+
+
+        #region Update NextRace and EventRunnerTimes with new prediction
+
+        /// <summary>
+        /// Updates NextRace and EventRunnerTimes with predicted time
+        /// </summary>
+        /// <param name="raceDate"></param>
+        /// <param name="distanceList"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult NewTarget(DateTime? raceDate, string distanceList)
         {
@@ -51,7 +75,47 @@ namespace RaceListService.Controllers
             var distances = db.distances.SingleOrDefault(d => d.Code == dCode).Value;
             CleanNextRaces();
             var allRunners = db.runners;
-            // foreach runner 
+            // foreach runner update next race predicted time and either add to EventRunnerTimes or update an existing EventRunnerTimes
+            UpdateRaceTimes(raceDate, thisEvent, distances, allRunners);
+            db.SaveChanges();
+
+            // Build VM for next Race List
+            var allNextRaces = db.NextRaces;
+            List<nextRaceVM> vm = new List<nextRaceVM>();
+            BuildNextRaceVM(allNextRaces, vm);
+            var ds = Convert.ToDouble(distances);
+            ViewBag.NewDistance = db.distances.SingleOrDefault(d => d.Value == ds).Name;
+            return View(vm);
+        }
+
+        /// <summary>
+        /// Build Next Race VM
+        /// </summary>
+        /// <param name="allNextRaces"></param>
+        /// <param name="vm"></param>
+        private void BuildNextRaceVM(DbSet<NextRace> allNextRaces, List<nextRaceVM> vm)
+        {
+            foreach (var m in allNextRaces)
+            {
+                var nr = new nextRaceVM();
+                var last = db.LastRaces.SingleOrDefault(l => l.RunnerId == m.RunnerId);
+                nr.LastDistance = db.distances.SingleOrDefault(d => d.Value == last.Distance).Name;
+                nr.LastTime = RaceCalc.formatTime(last.Time);
+                nr.RunnerName = m.runner.firstname + " " + m.runner.secondname;
+                nr.Time = RaceCalc.formatTime(m.Time);
+                vm.Add(nr);
+            }
+        }
+
+        /// <summary>
+        /// foreach runner update next race predicted time and either add to EventRunnerTimes or update an existing EventRunnerTimes
+        /// </summary>
+        /// <param name="raceDate"></param>
+        /// <param name="thisEvent"></param>
+        /// <param name="distances"></param>
+        /// <param name="allRunners"></param>
+        private void UpdateRaceTimes(DateTime? raceDate, Event thisEvent, double distances, DbSet<runner> allRunners)
+        {
             foreach (var r in allRunners)
             {
                 /// get the last race for this runner
@@ -62,11 +126,6 @@ namespace RaceListService.Controllers
                     var oldDistance = lastRace.Distance;
                     var oldtime = lastRace.Time;
                     double predictedTime = CalculatePredicion(distances, oldDistance, oldtime);
-
-                    /// create a nextRaceRunner
-                   
-
-
                     /// need to check if this is an existing or new entry
                     var ert = db.EventRunnerTimes.SingleOrDefault(rt => rt.EventId == thisEvent.EFKey && rt.RunnerId == r.EFKey && rt.Date == raceDate);
                     if (ert == null)
@@ -83,7 +142,7 @@ namespace RaceListService.Controllers
                         ert.Target = Convert.ToInt32(predictedTime);
                         db.Entry(ert).State = EntityState.Modified;
                     }
-                    //db.Entry(lastRace).State = EntityState.Modified;
+                
 
 
                     RunningModel.NextRace nextrace = new NextRace();
@@ -95,34 +154,18 @@ namespace RaceListService.Controllers
 
                 }
             }
-            db.SaveChanges();
-
-            // get last race time and distance
-            // calculate next time for next time
-            // update next date time and distance
-            // contruct view model to display new times.
-            var allNextRaces = db.NextRaces;
-            List<nextRaceVM> vm = new List<nextRaceVM>();
-            foreach (var m in allNextRaces)
-            {
-                var nr = new nextRaceVM();
-                var last = db.LastRaces.SingleOrDefault(l => l.RunnerId == m.RunnerId);
-                nr.LastDistance = db.distances.SingleOrDefault(d => d.Value == last.Distance).Name;
-                nr.LastTime = RaceCalc.formatTime(last.Time);
-                nr.RunnerName = m.runner.firstname + " " + m.runner.secondname;
-                nr.Time = RaceCalc.formatTime(m.Time);
-                vm.Add(nr);
-            }
-            var ds = Convert.ToDouble(distances);
-            ViewBag.NewDistance = db.distances.SingleOrDefault(d => d.Value == ds).Name;
-            return View(vm);
         }
 
+        /// <summary>
+        /// Cleans Next Race Table so new times can be enttered
+        /// </summary>
         private void CleanNextRaces()
         {
             db.NextRaces.RemoveRange(db.NextRaces);
             db.SaveChanges();
         }
+
+        #endregion
 
         private static double CalculatePredicion(double distances, double oldDistance, int oldtime)
         {

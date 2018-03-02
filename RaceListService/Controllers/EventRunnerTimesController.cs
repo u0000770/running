@@ -64,6 +64,7 @@ namespace RaceListService.Controllers
             return View(eventRunnerTime);
         }
 
+        // TODO: Form created post form update to complete
         // GET: EventRunnerTimes/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -94,17 +95,18 @@ namespace RaceListService.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EFKey,RunnerId,EventId,Target,Actual,Date,Active")] EventRunnerTime eventRunnerTime)
+        public ActionResult Edit(EditEventRunnerTimeVM vm)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(eventRunnerTime).State = EntityState.Modified;
+                var ert = db.EventRunnerTimes.Find(vm.RaceId);
+                ert.Actual = vm.RaceActualTime;
+                db.Entry(ert).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "NextRaces");
             }
-            ViewBag.EventId = new SelectList(db.Events, "EFKey", "Title", eventRunnerTime.EventId);
-            ViewBag.RunnerId = new SelectList(db.runners, "EFKey", "firstname", eventRunnerTime.RunnerId);
-            return View(eventRunnerTime);
+           
+            return View(vm);
         }
 
         // GET: EventRunnerTimes/Delete/5
