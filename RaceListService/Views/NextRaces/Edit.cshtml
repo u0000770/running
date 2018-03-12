@@ -5,13 +5,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="panel panel-default">
-    <div class="panel-body">
+<div class="panel panel-default" style="margin-top:3%">
+    <div class="panel-body" >
 
         @using (Html.BeginForm("Edit", "NextRaces", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
-        <div style="padding-left:10px;">
+        <div>
             <div class="form-horizontal">
                 <h4>Edit Recorded Last Race</h4>
                 <hr />
@@ -19,21 +19,21 @@
                 @Html.HiddenFor(model => model.RunnerId)
 
                 <div class="form-group">
-                    <label for="race">Race: </label>
+                    <label for="race" class = "control-label col-md-2">Race:  </label>
                     <div class="col-md-10">
                         @Html.DropDownList("distanceList", null, htmlAttributes: new { @class = "form-control" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="meeting">Race Date : </label>
+                    <label for="meeting" class="control-label col-md-2">Race Date : </label>
                     <div class="col-md-10">
                         <input name="raceDate" type="date" />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="Time">Race Time : </label>
+                    <label for="Time" class = "control-label col-md-2">Race Time : </label>
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.RaceTimeSpan, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.RaceTimeSpan, "", new { @class = "text-danger" })

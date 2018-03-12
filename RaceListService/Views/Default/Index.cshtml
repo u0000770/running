@@ -18,18 +18,26 @@
         <legend>Supply Credentials or Just Press</legend>
         <div>
             @using (Html.BeginForm("GetIn", "Default", FormMethod.Post))
-        {
-
+    {
+        <fieldset>
             <div class="form-group">
                 <input type="text" id="un" name="un" />
             </div>
             <div class="form-group">
                 <input type="text" id="pw" name="pw" />
             </div>
+        </fieldset>
+        <fieldset title="UKAN eg 3273942">
+            <div class="form-group">
+                <input type="text" id="ukan" name="ukan" />
+            </div>
+        </fieldset>
+
             <div class="form-group">
                 <input type="submit" name="btnSubmit" value="Press To Enter" />
             </div>
-    }
+ 
+            }
         </div>
         </fieldset>
 </body>

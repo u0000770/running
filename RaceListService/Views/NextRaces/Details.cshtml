@@ -73,7 +73,10 @@
                 @Html.DisplayFor(modelItem => item.RaceActualTime)
             </td>
             <td>
+                @if(Model.admin == true)
+                { 
                 @Html.ActionLink("Edit", "Edit", "EventRunnerTimes", new { id = item.RaceId }, null)
+                }
             </td>
         </tr>
     }

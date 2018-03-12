@@ -10,6 +10,7 @@ namespace RaceListService.Models
 {
     public class memberRaceDetailVM
     {
+        public bool admin { get; set; }
         public int RunnerId { get; set; }
         [Display(Name = "Name")]
         public string Name { get; set; }

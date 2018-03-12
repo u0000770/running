@@ -24,16 +24,25 @@ namespace RaceListService.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            // get all events
-            var eventList = db.Events;
-            // build a list of events to select one from
-            ViewBag.distanceList = buildSelectList(eventList);
-            // get all runners
-            var allRunners = db.runners.OrderBy(n => n.secondname);
-            List<nextRaceVM> vm = new List<nextRaceVM>();
-            // construct the viewmodel - list of Last Races 
-            BuildListofLastRaces(allRunners, vm);
-            return View(vm.OrderBy(v => v.date).OrderBy(n => n.RunnerName));
+            var admin = (bool)Session["admin"];
+
+            if (admin)
+            {
+                // get all events
+                var eventList = db.Events;
+                // build a list of events to select one from
+                ViewBag.distanceList = buildSelectList(eventList);
+                // get all runners
+                var allRunners = db.runners.OrderBy(n => n.secondname);
+                List<nextRaceVM> vm = new List<nextRaceVM>();
+                // construct the viewmodel - list of Last Races 
+                BuildListofLastRaces(allRunners, vm);
+                return View(vm.OrderBy(v => v.date).OrderBy(n => n.RunnerName));
+            }
+            else
+            {
+                return RedirectToAction("Index", "Default");
+            }
         }
 
         private void BuildListofLastRaces(IOrderedQueryable<runner> allRunners, List<nextRaceVM> vm)
@@ -301,8 +310,9 @@ namespace RaceListService.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Index", "Default");
             }
+
             runner thisRunner = db.runners.Find(id);
             if (thisRunner == null)
             {
@@ -313,6 +323,18 @@ namespace RaceListService.Controllers
 
             List<EventRaceTimesVM> listOfRacesVM = BuildEventRaceList(thisRunner);
             vm.listOfRaces = listOfRacesVM.OrderBy(r => r.RaceDate).ToList();
+
+            var admin = (bool)Session["admin"];
+
+            if (admin)
+            {
+                vm.admin = true;
+            }
+            else
+            {
+                vm.admin = false;
+            }
+
             return View(vm);
         }
 
