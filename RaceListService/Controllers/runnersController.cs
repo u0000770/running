@@ -8,17 +8,28 @@ using System.Web;
 using System.Web.Mvc;
 using RaceListService.Models;
 using runners;
+using RunningModel;
 
 namespace RaceListService.Controllers
 {
     public class runnersController : Controller
     {
 
+        private RunningModelEntities db = new RunningModelEntities();
         //private RunningModel.RunningModelEntities db = new RunningModel.RunningModelEntities();
-        private runners.rrcmlistRunners db = new runners.rrcmlistRunners();
+        //private runners.rrcmlistRunners db = new runners.rrcmlistRunners();
 
         // GET: runners
         public ActionResult Index()
+        {
+            var all = db.runners;
+            runnerListVM vm = new runnerListVM();
+            vm.listOfRunners = runnerListVM.buildVM(all).ToList();
+            vm.SelectedRunnerIDs = runnerListVM.buildSelectedList(vm.listOfRunners);
+            return View(vm);
+        }
+
+        public ActionResult JustLIst()
         {
             var all = db.runners;
             runnerListVM vm = new runnerListVM();
@@ -59,7 +70,7 @@ namespace RaceListService.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            runners.runner runner = db.runners.Find(id);
+            RunningModel.runner runner = db.runners.Find(id);
             if (runner == null)
             {
                 return HttpNotFound();
@@ -78,7 +89,7 @@ namespace RaceListService.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EFKey,firstname,secondname,ukan,dob,email,Active")] runner runner)
+        public ActionResult Create([Bind(Include = "EFKey,firstname,secondname,ukan,dob,email,Active")] RunningModel.runner runner)
         {
             if (ModelState.IsValid)
             {
@@ -97,7 +108,7 @@ namespace RaceListService.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            runners.runner runner = db.runners.Find(id);
+            RunningModel.runner runner = db.runners.Find(id);
             if (runner == null)
             {
                 return HttpNotFound();
@@ -110,7 +121,7 @@ namespace RaceListService.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EFKey,firstname,secondname,ukan,dob,email,Active")] runner runner)
+        public ActionResult Edit([Bind(Include = "EFKey,firstname,secondname,ukan,dob,email,Active")] RunningModel.runner runner)
         {
             if (ModelState.IsValid)
             {
@@ -128,7 +139,7 @@ namespace RaceListService.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            runners.runner runner = db.runners.Find(id);
+            RunningModel.runner runner = db.runners.Find(id);
             if (runner == null)
             {
                 return HttpNotFound();
@@ -141,7 +152,7 @@ namespace RaceListService.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            runners.runner runner = db.runners.Find(id);
+            RunningModel.runner runner = db.runners.Find(id);
             db.runners.Remove(runner);
             db.SaveChanges();
             return RedirectToAction("Index");

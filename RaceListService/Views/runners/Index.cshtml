@@ -44,6 +44,7 @@
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.EFKey }) |
                     @Html.ActionLink("Details", "Details", new { id = item.EFKey })
+                    @Html.ActionLink("Add Last Race", "Create","LastRaces", new { id = item.EFKey }, null)
                 </td>
             </tr>
         }

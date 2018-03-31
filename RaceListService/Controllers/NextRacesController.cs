@@ -33,7 +33,7 @@ namespace RaceListService.Controllers
                 // build a list of events to select one from
                 ViewBag.distanceList = buildSelectList(eventList);
                 // get all runners
-                var allRunners = db.runners.OrderBy(n => n.secondname);
+                var allRunners = db.runners.Where(r => r.Active == true).OrderBy(n => n.secondname);
                 List<nextRaceVM> vm = new List<nextRaceVM>();
                 // construct the viewmodel - list of Last Races 
                 BuildListofLastRaces(allRunners, vm);
