@@ -5,10 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Runner Admin</h2>
 
 <p>
-    @Html.ActionLink("Add New", "Create")
+    @Html.ActionLink("Add New Runner", "Create")
 </p>
 @using (Html.BeginForm("UpdateSelection", "runners", FormMethod.Post))
 {
@@ -42,8 +42,8 @@
                            @(Model.SelectedRunnerIDs.Contains(item.EFKey) ? "checked" : "") />
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.EFKey }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.EFKey })
+                    @Html.ActionLink("Edit", "Edit", new { id = item.EFKey }) ||
+                    @Html.ActionLink("Details", "Details", new { id = item.EFKey }) ||
                     @Html.ActionLink("Add Last Race", "Create","LastRaces", new { id = item.EFKey }, null)
                 </td>
             </tr>

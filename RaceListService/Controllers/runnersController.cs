@@ -18,15 +18,41 @@ namespace RaceListService.Controllers
         private RunningModelEntities db = new RunningModelEntities();
         //private RunningModel.RunningModelEntities db = new RunningModel.RunningModelEntities();
         //private runners.rrcmlistRunners db = new runners.rrcmlistRunners();
+        private bool IsAdmin()
+        {
+            try
+            {
+                var admin = (bool)Session["admin"];
+                if (admin)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
 
+            }
+            catch
+            {
+                return false;
+            }
+        }
         // GET: runners
         public ActionResult Index()
         {
-            var all = db.runners;
-            runnerListVM vm = new runnerListVM();
-            vm.listOfRunners = runnerListVM.buildVM(all).ToList();
-            vm.SelectedRunnerIDs = runnerListVM.buildSelectedList(vm.listOfRunners);
-            return View(vm);
+            if (IsAdmin())
+            {
+                var all = db.runners;
+                runnerListVM vm = new runnerListVM();
+                vm.listOfRunners = runnerListVM.buildVM(all).ToList();
+                vm.SelectedRunnerIDs = runnerListVM.buildSelectedList(vm.listOfRunners);
+                return View(vm);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Default");
+            }
         }
 
         public ActionResult JustLIst()

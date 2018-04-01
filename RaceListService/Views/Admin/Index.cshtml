@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>System Admin</h2>
+
+<dl>
+    <dt>Diciplines (Road, Track)</dt>
+    <dd>@Html.ActionLink("Disciplines", "Index", "Disciplines", new { area = "" }, null)</dd>
+    <dt>Approved Distances</dt>
+    <dt>@Html.ActionLink("Distances", "Index", "racedistances", new { area = "" }, null)</dt>
+    <dt>JR Race Admin</dt>
+    <dd>@Html.ActionLink("JR Race List", "Index", "RaceEvents", new { area = "" }, null)</dd>
+</dl>
+

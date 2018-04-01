@@ -17,6 +17,28 @@ namespace RaceListService.Controllers
     {
         private RunningModelEntities db = new RunningModelEntities();
 
+
+        private bool IsAdmin()
+        {
+            try
+            {
+                var admin = (bool)Session["admin"];
+                if (admin)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         #region Display List of Last Races and form to update next race
         /// <summary>
         /// Display a list of Last Races from LastRace collection for each runner
@@ -24,7 +46,7 @@ namespace RaceListService.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            var admin = (bool)Session["admin"];
+            var admin = IsAdmin();
 
             if (admin)
             {
@@ -324,7 +346,7 @@ namespace RaceListService.Controllers
             List<EventRaceTimesVM> listOfRacesVM = BuildEventRaceList(thisRunner);
             vm.listOfRaces = listOfRacesVM.OrderBy(r => r.RaceDate).ToList();
 
-            var admin = (bool)Session["admin"];
+            var admin = IsAdmin();
 
             if (admin)
             {
