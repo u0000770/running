@@ -33,7 +33,8 @@ namespace RaceListService.Controllers
         public ActionResult Index()
         {
             if(IsAdmin())
-            { 
+            {
+               ViewBag.Admin = true;
                return View();
             }
             else

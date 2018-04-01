@@ -43,6 +43,7 @@ namespace RaceListService.Controllers
         {
             if (IsAdmin())
             {
+                ViewBag.Admin = true;
                 var all = db.runners;
                 runnerListVM vm = new runnerListVM();
                 vm.listOfRunners = runnerListVM.buildVM(all).ToList();

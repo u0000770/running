@@ -50,6 +50,7 @@ namespace RaceListService.Controllers
 
             if (admin)
             {
+                ViewBag.Admin = true;
                 // get all events
                 var eventList = db.Events;
                 // build a list of events to select one from
@@ -350,10 +351,12 @@ namespace RaceListService.Controllers
 
             if (admin)
             {
+                ViewBag.Admin = true;
                 vm.admin = true;
             }
             else
             {
+                ViewBag.Admin = false;
                 vm.admin = false;
             }
 
