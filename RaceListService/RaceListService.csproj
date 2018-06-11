@@ -192,6 +192,7 @@
     <Compile Include="Controllers\DisciplinesController.cs" />
     <Compile Include="Controllers\EventRunnerTimesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\JRRankController.cs" />
     <Compile Include="Controllers\LastRacesController.cs" />
     <Compile Include="Controllers\ManageRaceController.cs" />
     <Compile Include="Controllers\memberListsController.cs" />
@@ -322,6 +323,7 @@
     <Content Include="Views\ManageRace\NewTarget.cshtml" />
     <Content Include="Views\LastRaces\Create.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\JRRank\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

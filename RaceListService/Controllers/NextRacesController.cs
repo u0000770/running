@@ -345,6 +345,11 @@ namespace RaceListService.Controllers
             BuildmemberRaceDetailVM(id, vm);
 
             List<EventRaceTimesVM> listOfRacesVM = BuildEventRaceList(thisRunner);
+            var total = 0;
+            foreach(EventRaceTimesVM ev in listOfRacesVM)
+            {
+                total = total + Convert.ToInt32(ev.TimeDifference);
+            }
             vm.listOfRaces = listOfRacesVM.OrderBy(r => r.RaceDate).ToList();
 
             var admin = IsAdmin();
@@ -359,7 +364,7 @@ namespace RaceListService.Controllers
                 ViewBag.Admin = false;
                 vm.admin = false;
             }
-
+            vm.totalTime = total;
             return View(vm);
         }
 
@@ -396,12 +401,28 @@ namespace RaceListService.Controllers
                 ert.RaceId = race.EFKey;
                 ert.RaceDistance = db.distances.SingleOrDefault(d => d.Code == race.Event.DistanceCode).Name;
                 ert.RaceTitle = race.Event.Title;
-                ert.RaceDate = (DateTime)race.Date;
+                
                 int x = race.Actual ?? 0;
                 ert.RaceActualTime = EventRaceTimesVM.formatResult(x);
                 int y = race.Target ?? 0;
                 ert.RaceTargetTime = EventRaceTimesVM.formatResult(y);
-                listOfRacesVM.Add(ert);
+                int td = 0;
+                if (x != 0)
+                {
+                   td  = y - x;
+                }
+                if (td > 0)
+                { ert.TimeDifference = (y - x).ToString(); }
+                else
+                { ert.TimeDifference = 0.ToString(); }
+
+
+                if (race.Date != null)
+                {
+                    ert.RaceDate = (DateTime)race.Date;
+                    listOfRacesVM.Add(ert);
+                }
+                
             }
 
             return listOfRacesVM;
@@ -424,7 +445,10 @@ namespace RaceListService.Controllers
             }
             var eventList = db.Events;
             ViewBag.distanceList = buildSelectList(eventList);
+            RunningModel.runner runner = db.runners.Find(id);
+            var name = runner.firstname + " " + runner.secondname;
             var vm = new EditLastRaceVM(Race);
+            ViewBag.name = name;
             return View(vm);
         }
 

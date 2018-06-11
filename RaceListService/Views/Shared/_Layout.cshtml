@@ -30,14 +30,15 @@
                 <li>@Html.ActionLink("List of Runners", "Index", "NextRaces", new { area = "" }, null)</li>
                 <li>@Html.ActionLink("Runner Admin", "Index", "runners", new { area = "" }, null)</li>
                 <li>@Html.ActionLink("System Admin", "Index", "Admin", new { area = "" }, null)</li>
-            }
-        }
-        catch
-        {
-            admin = false;
-        }
-                }
-                    
+                <li>@Html.ActionLink("JR Trophy", "Index", "JRRank", new { area = "" }, null)</li>
+}
+}
+catch
+{
+admin = false;
+}
+                    }
+
 
                 </ul>
             </div>

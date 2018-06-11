@@ -32,7 +32,7 @@
     </dd>
 </dl>
 <h4>&nbsp;</h4>
-<h4>All JR Races with Predicted Times / Actual Times</h4>
+<h4>Your JR Race time difference is @Model.totalTime seconds </h4>
 <table class="table">
     <tr>
         <th>
@@ -52,9 +52,9 @@
         </th>
         <th></th>
     </tr>
-
     @foreach (var item in Model.listOfRaces)
     {
+
         <tr>
 
             <td>
@@ -73,9 +73,12 @@
                 @Html.DisplayFor(modelItem => item.RaceActualTime)
             </td>
             <td>
-                @if(Model.admin == true)
-                { 
-                @Html.ActionLink("Edit", "Edit", "EventRunnerTimes", new { id = item.RaceId }, null)
+                @Html.DisplayFor(modelItem => item.TimeDifference)
+            </td>
+            <td>
+                @if (Model.admin == true)
+                {
+                    @Html.ActionLink("Edit", "Edit", "EventRunnerTimes", new { id = item.RaceId }, null)
                 }
             </td>
         </tr>

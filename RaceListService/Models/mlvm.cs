@@ -1,13 +1,33 @@
 ﻿using ClassLibrary1;
+using runners;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
 namespace RaceListService.Models
 {
+    public class jrListItemVM
+    {
+        public jrListItemVM()
+        {
+        }
+
+        public bool admin { get; set; }
+        public int RunnerId { get; set; }
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+        [Display(Name = "Points")]
+        public int jrPoints { get; set; }
+        [Display(Name = "Time Difference")]
+        public int timeDiff { get; set; }
+
+
+    }
+
     public class ClubMemberDetailVM
     {
         public int Id { get; set; }

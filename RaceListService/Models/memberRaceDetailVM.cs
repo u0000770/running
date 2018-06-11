@@ -22,6 +22,8 @@ namespace RaceListService.Models
         public string lastRaceTitle { get; set; }
         [Display(Name = "Last Race Actual Time")]
         public string lastRaceTime { get; set; }
+        [Display(Name = "Total Time Difference ")]
+        public int totalTime { get; set; }
         [Display(Name = "Last Race Date")]
         [DataType(DataType.Date)]
         public DateTime lastRaceDate { get; set; }
@@ -42,6 +44,8 @@ namespace RaceListService.Models
         [Display(Name = "Event Race Date")]
         [DataType(DataType.Date)]
         public DateTime RaceDate { get; set; }
+        [Display(Name = "Time Difference")]
+        public string TimeDifference { get; set; }
 
         public static string formatResult(int result)
         {
