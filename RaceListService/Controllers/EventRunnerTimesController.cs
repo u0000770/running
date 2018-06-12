@@ -132,7 +132,7 @@ namespace RaceListService.Controllers
             EventRunnerTime eventRunnerTime = db.EventRunnerTimes.Find(id);
             db.EventRunnerTimes.Remove(eventRunnerTime);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "NextRaces");
         }
 
         protected override void Dispose(bool disposing)

@@ -55,33 +55,39 @@
     @foreach (var item in Model.listOfRaces)
     {
 
-        <tr>
+    <tr>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.RaceTitle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RaceDistance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RaceDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RaceTargetTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RaceActualTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimeDifference)
-            </td>
-            <td>
-                @if (Model.admin == true)
-                {
-                    @Html.ActionLink("Edit", "Edit", "EventRunnerTimes", new { id = item.RaceId }, null)
-                }
-            </td>
-        </tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceTitle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceDistance)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceTargetTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceActualTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TimeDifference)
+        </td>
+        <td>
+            @if (Model.admin == true)
+        {
+            @Html.ActionLink("Edit", "Edit", "EventRunnerTimes", new { id = item.RaceId }, null)
+    }
+        </td>
+        <td>
+            @if (Model.admin == true)
+        {
+            @Html.ActionLink("Delete", "Delete", "EventRunnerTimes", new { id = item.RaceId }, null)
+    }
+        </td>
+    </tr>
     }
 
 </table>
