@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/RunningModel" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/RunningModel" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfrunner">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="runner" nillable="true" type="tns:runner" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfrunner" nillable="true" type="tns:ArrayOfrunner" />
+  <xs:complexType name="runner">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Active" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="EFKey" type="xs:int" />
+      <xs:element minOccurs="0" name="EventRunnerTimes" nillable="true" type="tns:ArrayOfEventRunnerTime" />
+      <xs:element minOccurs="0" name="LastRaces" nillable="true" type="tns:ArrayOfLastRace" />
+      <xs:element minOccurs="0" name="NextRaces" nillable="true" type="tns:ArrayOfNextRace" />
+      <xs:element minOccurs="0" name="ageGradeCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="dob" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="firstname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="secondname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ukan" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="runner" nillable="true" type="tns:runner" />
+  <xs:complexType name="ArrayOfEventRunnerTime">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="EventRunnerTime" nillable="true" type="tns:EventRunnerTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfEventRunnerTime" nillable="true" type="tns:ArrayOfEventRunnerTime" />
+  <xs:complexType name="EventRunnerTime">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Active" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Actual" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Date" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="EFKey" type="xs:int" />
+      <xs:element minOccurs="0" name="Event" nillable="true" type="tns:Event" />
+      <xs:element minOccurs="0" name="EventId" type="xs:int" />
+      <xs:element minOccurs="0" name="RunnerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Target" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="runner" nillable="true" type="tns:runner" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="EventRunnerTime" nillable="true" type="tns:EventRunnerTime" />
+  <xs:complexType name="Event">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Active" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Discipline" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DistanceCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EFKey" type="xs:int" />
+      <xs:element minOccurs="0" name="EventRunnerTimes" nillable="true" type="tns:ArrayOfEventRunnerTime" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Venue" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Event" nillable="true" type="tns:Event" />
+  <xs:complexType name="ArrayOfLastRace">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LastRace" nillable="true" type="tns:LastRace" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLastRace" nillable="true" type="tns:ArrayOfLastRace" />
+  <xs:complexType name="LastRace">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Distance" type="xs:double" />
+      <xs:element minOccurs="0" name="EFKey" type="xs:int" />
+      <xs:element minOccurs="0" name="RunnerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Time" type="xs:int" />
+      <xs:element minOccurs="0" name="runner" nillable="true" type="tns:runner" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LastRace" nillable="true" type="tns:LastRace" />
+  <xs:complexType name="ArrayOfNextRace">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NextRace" nillable="true" type="tns:NextRace" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfNextRace" nillable="true" type="tns:ArrayOfNextRace" />
+  <xs:complexType name="NextRace">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Active" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Distance" type="xs:double" />
+      <xs:element minOccurs="0" name="EFKey" type="xs:int" />
+      <xs:element minOccurs="0" name="RunnerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Time" type="xs:int" />
+      <xs:element minOccurs="0" name="runner" nillable="true" type="tns:runner" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="NextRace" nillable="true" type="tns:NextRace" />
+</xs:schema>

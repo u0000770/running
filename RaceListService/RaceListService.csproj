@@ -62,11 +62,23 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.6\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Cors, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.6\lib\net45\System.Web.Cors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.6\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Cors, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.6\lib\net45\System.Web.Http.Cors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
@@ -83,17 +95,11 @@
     </Reference>
     <Reference Include="System.Net.Http">
     </Reference>
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
@@ -191,22 +197,28 @@
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\DisciplinesController.cs" />
     <Compile Include="Controllers\EventRunnerTimesController.cs" />
+    <Compile Include="Controllers\HandicapController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JRRankController.cs" />
     <Compile Include="Controllers\LastRacesController.cs" />
+    <Compile Include="Controllers\LastRaceServiceController.cs" />
     <Compile Include="Controllers\ManageRaceController.cs" />
     <Compile Include="Controllers\memberListsController.cs" />
     <Compile Include="Controllers\NextRacesController.cs" />
     <Compile Include="Controllers\racedistancesController.cs" />
     <Compile Include="Controllers\RaceEventsController.cs" />
     <Compile Include="Controllers\RaceRunnersController.cs" />
+    <Compile Include="Controllers\RunnerCRUDSServiceController.cs" />
     <Compile Include="Controllers\runnersController.cs" />
+    <Compile Include="Controllers\RunnerServiceController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\EditEventRunnerTimeVM.cs" />
     <Compile Include="Models\EditLastRaceVM.cs" />
+    <Compile Include="Models\HCListItemVM.cs" />
+    <Compile Include="Models\LastRaceDTO.cs" />
     <Compile Include="Models\memberRaceDetailVM.cs" />
     <Compile Include="Models\memberDetailVM.cs" />
     <Compile Include="Models\mlvm.cs" />
@@ -250,7 +262,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\testTimes.xlsx" />
-    <None Include="Properties\PublishProfiles\RaceListService20171125084801 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\rundistance - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -324,6 +336,8 @@
     <Content Include="Views\LastRaces\Create.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\JRRank\Index.cshtml" />
+    <Content Include="Views\Handicap\Index.cshtml" />
+    <Content Include="Views\Handicap\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

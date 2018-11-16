@@ -8,6 +8,7 @@ using System.IO;
 using ClassLibrary1;
 using RaceListService.Models;
 using System.Data.Entity;
+using RunningModel;
 
 namespace RaceListService.Controllers
 {
@@ -15,6 +16,7 @@ namespace RaceListService.Controllers
     {
 
         private Model1 db = new Model1();
+       // private RunningModelEntities newdb = new RunningModelEntities();
 
         public ActionResult NewTarget(string racedetails)
         {
@@ -102,18 +104,18 @@ namespace RaceListService.Controllers
         public ActionResult ListRunners()
         {
 
-            try
-            {
-                var valid = (bool)Session["login"];
-                if (!valid)
-                {
-                    return RedirectToAction("Index", "Default");
-                }
-            }
-            catch
-            {
-                return RedirectToAction("Index", "Default");
-            }
+            //try
+            //{
+            //    var valid = (bool)Session["login"];
+            //    if (!valid)
+            //    {
+            //        return RedirectToAction("Index", "Default");
+            //    }
+            //}
+            //catch
+            //{
+            //    return RedirectToAction("Index", "Default");
+            //}
 
             // get all runners with result time
             var AllRunners = db.memberLists;
@@ -128,89 +130,90 @@ namespace RaceListService.Controllers
             return View(vm);
         }
 
-        public ActionResult Details(int id, RaceListService.Models.memberDetailVM rxvm)
-        {
-            try
-            {
-                var valid = (bool)Session["login"];
-                if (!valid)
-                {
-                    return RedirectToAction("Index", "Default");
-                }
-            }
-            catch
-            {
-                return RedirectToAction("Index", "Default");
-            }
-            // get runner
-            var ThisRunner = db.memberLists.Find(id);
-            ViewBag.Title = "Cup Times";
-            var targetDistance = TempData["targetdistance"];
-            // create vm
-            memberDetailVM vm = new memberDetailVM();
-            // give vm runner name
-            vm.Name = ThisRunner.Name;
-            vm.currentTarget = RaceTimesVM.formatResult(ThisRunner.Time);
-            // get ALL thier races
-            IEnumerable<ClassLibrary1.race> listofraces = ThisRunner.races;
-            // create an empty list to display and populate with details
-            vm.listOfRaces = new List<RaceTimesVM>();
-            vm.listOfRaces = memberDetailVM.buildList(listofraces, Convert.ToDouble(targetDistance));
+        //public ActionResult Details(int id, RaceListService.Models.memberDetailVM rxvm)
+        //{
+        //    //try
+        //    //{
+        //    //    var valid = (bool)Session["login"];
+        //    //    if (!valid)
+        //    //    {
+        //    //        return RedirectToAction("Index", "Default");
+        //    //    }
+        //    //}
+        //    //catch
+        //    //{
+        //    //    return RedirectToAction("Index", "Default");
+        //    //}
+        //    // get runner
+        //    var ThisRunner = db.memberLists.Find(id);
+
+        //    ViewBag.Title = "Cup Times";
+        //    var targetDistance = TempData["targetdistance"];
+        //    // create vm
+        //    memberDetailVM vm = new memberDetailVM();
+        //    // give vm runner name
+        //    vm.Name = ThisRunner.Name;
+        //    vm.currentTarget = RaceTimesVM.formatResult(ThisRunner.Time);
+        //    // get ALL thier races
+        //    IEnumerable<ClassLibrary1.race> listofraces = ThisRunner.races;
+        //    // create an empty list to display and populate with details
+        //    vm.listOfRaces = new List<RaceTimesVM>();
+        //    vm.listOfRaces = memberDetailVM.buildList(listofraces, Convert.ToDouble(targetDistance));
 
 
-            List<RaceTimesVM> copy = new List<RaceTimesVM>();
-            copy.AddRange(vm.listOfRaces);
-            vm.simpleAverage = memberDetailVM.CalcSimpleAve(vm.listOfRaces);
-            vm.listOfRaces = copy.OrderBy(r => r.predictedTime).ToList();
-            vm.SelectedRaceIDs = memberDetailVM.buildSelectedList(vm.listOfRaces);
+        //    List<RaceTimesVM> copy = new List<RaceTimesVM>();
+        //    copy.AddRange(vm.listOfRaces);
+        //    vm.simpleAverage = memberDetailVM.CalcSimpleAve(vm.listOfRaces);
+        //    vm.listOfRaces = copy.OrderBy(r => r.predictedTime).ToList();
+        //    vm.SelectedRaceIDs = memberDetailVM.buildSelectedList(vm.listOfRaces);
 
-            // non selected
-            if (rxvm.SelectedRaceIDs != null && rxvm.SelectedRaceIDs.Count > 0)
-            {
+        //    // non selected
+        //    if (rxvm.SelectedRaceIDs != null && rxvm.SelectedRaceIDs.Count > 0)
+        //    {
 
-                List<RaceTimesVM> selectedRaceVM = new List<RaceTimesVM>();
-                List<race> selectedRaces = new List<race>();
-                foreach (var r in listofraces)
-                {
-                    if (rxvm.SelectedRaceIDs.Any(s => s == r.Id))
-                    {
-                        selectedRaces.Add(r);
-                    }
+        //        List<RaceTimesVM> selectedRaceVM = new List<RaceTimesVM>();
+        //        List<race> selectedRaces = new List<race>();
+        //        foreach (var r in listofraces)
+        //        {
+        //            if (rxvm.SelectedRaceIDs.Any(s => s == r.Id))
+        //            {
+        //                selectedRaces.Add(r);
+        //            }
 
-                }
-                vm.selectedRaces = memberDetailVM.buildList(selectedRaces, Convert.ToDouble(targetDistance));
-                vm.SelectedRaceIDs = memberDetailVM.buildSelectedList(vm.selectedRaces);
-                vm.topAndtailAverage = memberDetailVM.CalcSimpleAve(vm.selectedRaces);
+        //        }
+        //        vm.selectedRaces = memberDetailVM.buildList(selectedRaces, Convert.ToDouble(targetDistance));
+        //        vm.SelectedRaceIDs = memberDetailVM.buildSelectedList(vm.selectedRaces);
+        //        vm.topAndtailAverage = memberDetailVM.CalcSimpleAve(vm.selectedRaces);
 
 
 
-                string newtime = vm.topAndtailAverage;
+        //        string newtime = vm.topAndtailAverage;
 
-                int seconds = UpdateTime(newtime);
+        //        int seconds = UpdateTime(newtime);
 
-                ThisRunner.Time = seconds;
-                ThisRunner.Distance = Convert.ToDouble(targetDistance);
-                vm.SelectedRaceIDs = rxvm.SelectedRaceIDs;
-                vm.currentTarget = RaceTimesVM.formatResult(seconds);
+        //        ThisRunner.Time = seconds;
+        //        ThisRunner.Distance = Convert.ToDouble(targetDistance);
+        //        vm.SelectedRaceIDs = rxvm.SelectedRaceIDs;
+        //        vm.currentTarget = RaceTimesVM.formatResult(seconds);
 
-            }
-            else
-            {
-                // none selected
-                string newtime = vm.simpleAverage;
-                int seconds = UpdateTime(newtime);
-                ThisRunner.Time = seconds;
+        //    }
+        //    else
+        //    {
+        //        // none selected
+        //        string newtime = vm.simpleAverage;
+        //        int seconds = UpdateTime(newtime);
+        //        ThisRunner.Time = seconds;
 
-            }
+        //    }
             
-            ViewBag.targetdistance = RaceDetails.GetByRaceNameByMeters(Convert.ToDouble(TempData["targetdistance"]));
-            db.Entry(ThisRunner).State = EntityState.Modified;
-            db.SaveChanges();
-            TempData["targetdistance"] = targetDistance;
-            return View(vm);
-           // return RedirectToAction("ListRunners");
+        //    ViewBag.targetdistance = RaceDetails.GetByRaceNameByMeters(Convert.ToDouble(TempData["targetdistance"]));
+        //    db.Entry(ThisRunner).State = EntityState.Modified;
+        //    db.SaveChanges();
+        //    TempData["targetdistance"] = targetDistance;
+        //    return View(vm);
+        //   // return RedirectToAction("ListRunners");
 
-        }
+        //}
 
         private static int UpdateTime(string newtime)
         {
@@ -226,42 +229,42 @@ namespace RaceListService.Controllers
         /// The file location is read from tempdata path
         /// </summary>
         /// <returns></returns>
-        public ActionResult UpLoad()
-        {
-            try
-            {
-                var valid = (bool)Session["login"];
-                if (!valid)
-                {
-                    return RedirectToAction("Index", "Default");
-                }
-            }
-            catch
-            {
-                return RedirectToAction("Index", "Default");
-            }
+        //public ActionResult UpLoad()
+        //{
+        //    try
+        //    {
+        //        var valid = (bool)Session["login"];
+        //        if (!valid)
+        //        {
+        //            return RedirectToAction("Index", "Default");
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        return RedirectToAction("Index", "Default");
+        //    }
 
-            var fred = TempData["path"].ToString();
-            //var filesData = Directory.GetFiles(@fred);
-            string path = Server.MapPath("~/App_Data/" + fred);
-            //string path = Server.MapPath(fred.ToString());
-            var package = new OfficeOpenXml.ExcelPackage(new FileInfo(path));
+        //    var fred = TempData["path"].ToString();
+        //    //var filesData = Directory.GetFiles(@fred);
+        //    string path = Server.MapPath("~/App_Data/" + fred);
+        //    //string path = Server.MapPath(fred.ToString());
+        //    var package = new OfficeOpenXml.ExcelPackage(new FileInfo(path));
 
-            ExcelWorksheet workSheet = package.Workbook.Worksheets[1];
-            CleanDataBase();
+        //    ExcelWorksheet workSheet = package.Workbook.Worksheets[1];
+        //    CleanDataBase();
 
-            for (int row = workSheet.Dimension.Start.Row;
-                     row <= workSheet.Dimension.End.Row;
-                     row++)
-            {
-                var runnderID = AddRunnerToDb(workSheet, row);
-                ReadRowData(workSheet, row, runnderID);
-            }
+        //    for (int row = workSheet.Dimension.Start.Row;
+        //             row <= workSheet.Dimension.End.Row;
+        //             row++)
+        //    {
+        //        var runnderID = AddRunnerToDb(workSheet, row);
+        //        ReadRowData(workSheet, row, runnderID);
+        //    }
 
-            ViewBag.Title = "Home Page";
+        //    ViewBag.Title = "Home Page";
 
-            return View();
-        }
+        //    return View();
+        //}
 
         private void CleanDataBase()
         {
@@ -269,16 +272,16 @@ namespace RaceListService.Controllers
             db.memberLists.RemoveRange(db.memberLists);
         }
 
-        private int AddRunnerToDb(ExcelWorksheet workSheet, int row)
-        {
-            memberList memberList = new memberList();
-            memberList.Name = GetName(workSheet, row);
-            memberList.Time = 0;
-            memberList.Distance = 8046.72;
-            db.memberLists.Add(memberList);
-            db.SaveChanges();
-            return memberList.Id;
-        }
+        //private int AddRunnerToDb(ExcelWorksheet workSheet, int row)
+        //{
+        //    memberList memberList = new memberList();
+        //    memberList.Name = GetName(workSheet, row);
+        //    memberList.Time = 0;
+        //    memberList.Distance = 8046.72;
+        //    db.memberLists.Add(memberList);
+        //    db.SaveChanges();
+        //    return memberList.Id;
+        //}
 
         private double calcPredictedTime(double d1, double d2, int t1)
         {
@@ -331,46 +334,46 @@ namespace RaceListService.Controllers
             }
         }
 
-        private static void ReadRowData(ExcelWorksheet workSheet, int row, int runnerId)
-        {
+        //private static void ReadRowData(ExcelWorksheet workSheet, int row, int runnerId)
+        //{
 
-            Model1 db = new Model1();
-            for (int col = workSheet.Dimension.Start.Column + 1;
-                                     col <= workSheet.Dimension.End.Column;
-                                     col = col + 2){
-                object cellValue = workSheet.Cells[row, col].Value;
-                if (workSheet.Cells[row, col].Value != null)
-                {
-                    AddResult(workSheet, row,col, runnerId, db);
-                }
-            }
+        //    Model1 db = new Model1();
+        //    for (int col = workSheet.Dimension.Start.Column + 1;
+        //                             col <= workSheet.Dimension.End.Column;
+        //                             col = col + 2){
+        //        object cellValue = workSheet.Cells[row, col].Value;
+        //        if (workSheet.Cells[row, col].Value != null)
+        //        {
+        //            AddResult(workSheet, row,col, runnerId, db);
+        //        }
+        //    }
 
-        }
+        //}
 
-        private static void AddResult(ExcelWorksheet workSheet, int row,int col, int runnerId, Model1 db)
-        {
-            // var d = RaceDetails.GetMetersByName(workSheet.Cells[row, col].Value.ToString());
-            var d = RaceDetails.GetMetersByCode(workSheet.Cells[row, col].Value.ToString());
-            var distance = workSheet.Cells[row, col].Value;
-            var time = workSheet.Cells[row, col + 1].Value.ToString();
+        //private static void AddResult(ExcelWorksheet workSheet, int row,int col, int runnerId, Model1 db)
+        //{
+        //    // var d = RaceDetails.GetMetersByName(workSheet.Cells[row, col].Value.ToString());
+        //    var d = RaceDetails.GetMetersByCode(workSheet.Cells[row, col].Value.ToString());
+        //    var distance = workSheet.Cells[row, col].Value;
+        //    var time = workSheet.Cells[row, col + 1].Value.ToString();
 
             
 
-            string output = new string(time.Where(c => (Char.IsDigit(c) || c == '.' || c == ':')).ToArray());
+        //    string output = new string(time.Where(c => (Char.IsDigit(c) || c == '.' || c == ':')).ToArray());
 
-            string SubString = output.Substring(output.Length - 8);
-            TimeSpan ts = TimeSpan.Parse(SubString);
-            double totalSeconds = ts.TotalSeconds;
-            int seconds = Convert.ToInt32(totalSeconds);
+        //    string SubString = output.Substring(output.Length - 8);
+        //    TimeSpan ts = TimeSpan.Parse(SubString);
+        //    double totalSeconds = ts.TotalSeconds;
+        //    int seconds = Convert.ToInt32(totalSeconds);
 
-            ClassLibrary1.race Arace = new race();
-            Arace.runner = runnerId;
-            Arace.distance = d;
-            Arace.time = seconds;
+        //    ClassLibrary1.race Arace = new race();
+        //    Arace.runner = runnerId;
+        //    Arace.distance = d;
+        //    Arace.time = seconds;
 
-            db.races.Add(Arace);
-            db.SaveChanges();
-        }
+        //    db.races.Add(Arace);
+        //    db.SaveChanges();
+        //}
     }
 }
 

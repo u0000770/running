@@ -1,0 +1,95 @@
+﻿@model RaceListService.Models.memberRaceDetailVM
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>&nbsp;</h4>
+<h4>Your Last JR Trophy Race Reference Time</h4>
+<hr />
+<dl>
+    <dt>
+        @Html.DisplayNameFor(model => model.lastRaceDate)
+    </dt>
+    <dd>
+        @Html.DisplayFor(model => model.lastRaceDate)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.lastRaceDistance)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.lastRaceDistance)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.lastRaceTime)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.lastRaceTime)
+    </dd>
+</dl>
+<h4>&nbsp;</h4>
+<h4>Your JR Race time difference is @Model.totalTime seconds </h4>
+<table class="table">
+    <tr>
+        <th>
+            Race
+        </th>
+        <th>
+            Distance
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            Target Time
+        </th>
+        <th>
+            Actual Time
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model.listOfRaces)
+    {
+
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.RaceTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaceDistance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaceDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaceTargetTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaceActualTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeDifference)
+            </td>
+            <td>
+                @if (Model.admin == true)
+                {
+                    @Html.ActionLink("Edit", "Edit", "EventRunnerTimes", new { id = item.RaceId }, null)
+                }
+            </td>
+            <td>
+                @if (Model.admin == true)
+                {
+                    @Html.ActionLink("Delete", "Delete", "EventRunnerTimes", new { id = item.RaceId }, null)
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+<hr />

@@ -1,0 +1,46 @@
+﻿@model IEnumerable<RaceListService.Models.HCListItemVM>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RunnerId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RunnerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.numberofRaces)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RunnerId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RunnerName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.numberofRaces)
+        </td>
+        <td>
+            
+            @Html.ActionLink("Details", "Details", new { id=item.RunnerId  }) 
+       
+        </td>
+    </tr>
+}
+
+</table>

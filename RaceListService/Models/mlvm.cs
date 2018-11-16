@@ -26,7 +26,7 @@ namespace RaceListService.Models
         public int races { get; set; }
         [Display(Name = "Time Difference")]
         public int timeDiff { get; set; }
-
+        public bool JR { get; set; }
 
     }
 
