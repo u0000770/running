@@ -1,0 +1,28 @@
+
+<p *ngIf="!runner.listOfRaces"><em>Loading...</em></p>
+
+<h1>Race details for {{ runner.Name }} : {{ runner.ukaNumber }}</h1>
+
+<table class='table' *ngIf="runner.listOfRaces">
+  <thead>
+    <tr>
+      <th>Race</th>
+      <th>Date</th>
+      <th>Run Time</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let r of runner.listOfRaces">
+      <td>{{ r.RaceTitle }}</td>
+      <td>{{ r.RaceDate }}</td>
+      <td>{{ r.RaceActualTime }}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+<p><a [routerLink]="['/calc', runner.ukaNumber]">Calculate Race Times for {{ runner.ukaNumber }}</a></p>
+
+

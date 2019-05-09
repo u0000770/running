@@ -45,8 +45,10 @@ namespace RaceListService.Controllers
             {
                 ViewBag.Admin = true;
                 var all = db.runners;
+                //List<RunningModel.runner> qual = getActiveRunners(all);
+                List<RunningModel.runner> qual = all.ToList();
                 runnerListVM vm = new runnerListVM();
-                vm.listOfRunners = runnerListVM.buildVM(all).ToList();
+                vm.listOfRunners = runnerListVM.buildVM(qual).ToList();
                 vm.SelectedRunnerIDs = runnerListVM.buildSelectedList(vm.listOfRunners);
                 return View(vm);
             }
@@ -54,6 +56,23 @@ namespace RaceListService.Controllers
             {
                 return RedirectToAction("Index", "Default");
             }
+        }
+
+        private List<RunningModel.runner> getActiveRunners(DbSet<RunningModel.runner> all)
+        {
+            List<RunningModel.runner> outlist = new List<RunningModel.runner>();
+            var yearAgo = DateTime.Now.AddYears(-1);
+            foreach (var r in all)
+            {
+                var id = r.EFKey;
+                var runs = db.EventRunnerTimes.Where(x => x.RunnerId == id && x.Actual != null && x.Date >= yearAgo);
+                if (runs.Count() > 0)
+                {
+                    outlist.Add(r);
+                }
+            }
+
+            return outlist;
         }
 
         public ActionResult JustLIst()
@@ -90,6 +109,16 @@ namespace RaceListService.Controllers
 
         }
 
+
+        private void BuildmemberRaceDetailVM(RunningModel.runner thisRunner, RaceListService.Models.memberRaceDetailVM vm)
+        {
+            vm.RunnerId = thisRunner.EFKey;
+            vm.Name = thisRunner.firstname + " " + thisRunner.secondname;
+            vm.ukaNumber = thisRunner.ukan;
+        }
+
+       
+
         // GET: runners/Details/5
         public ActionResult Details(int? id)
         {
@@ -97,12 +126,61 @@ namespace RaceListService.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            RunningModel.runner runner = db.runners.Find(id);
-            if (runner == null)
+            RunningModel.runner thisRunner = db.runners.Find(id);
+            // get list of races for runner 
+            if (thisRunner == null)
             {
                 return HttpNotFound();
             }
-            return View(runner);
+
+            var vm = new RaceListService.Models.memberRaceDetailVM();
+            BuildmemberRaceDetailVM(thisRunner, vm);
+            List<RaceListService.Models.EventRaceTimesVM> listOfRacesVM = BuildEventRaceList(thisRunner);
+            ViewBag.Runner = vm;
+            return View(listOfRacesVM);
+        }
+
+        private List<EventRaceTimesVM> BuildEventRaceList(RunningModel.runner thisRunner)
+        {
+
+            List<EventRaceTimesVM> VM = new List<EventRaceTimesVM>();
+            var listOfRaces = db.EventRunnerTimes.Where(r => r.RunnerId == thisRunner.EFKey);
+            DateTime startOfYear = new DateTime(2018, 12, 30);
+            var thisYearsRaces = listOfRaces.Where(r => r.Date >= startOfYear);
+            foreach(var race in thisYearsRaces)
+            {
+                RaceListService.Models.EventRaceTimesVM ert = new RaceListService.Models.EventRaceTimesVM();
+                ert.RaceId = race.EFKey;
+                ert.RaceDistance = db.distances.SingleOrDefault(d => d.Code == race.Event.DistanceCode).Name;
+                var distance = db.distances.SingleOrDefault(d => d.Code == race.Event.DistanceCode).Value;
+                ert.RaceTitle = race.Event.Title;
+
+                int x = race.Actual ?? 0;
+                int y = race.Target ?? 0;
+
+                ert.RaceActualTime = RaceListService.Models.EventRaceTimesVM.formatResult(x);
+                ert.TargetTime = y;
+                ert.RaceTargetTime = RaceListService.Models.EventRaceTimesVM.formatResult(y);
+                int td = 0;
+                if (x != 0)
+                {
+                    td = y - x;
+                }
+                if (td > 0)
+                { ert.TimeDifference = (y - x).ToString(); }
+                else
+                { ert.TimeDifference = 0.ToString(); }
+
+
+                if (race.Date != null)
+                {
+                    ert.RaceDate = (DateTime)race.Date;
+                    VM.Add(ert);
+                }
+
+            }
+
+            return VM;
         }
 
         // GET: runners/Create

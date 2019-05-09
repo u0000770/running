@@ -1,0 +1,83 @@
+﻿@model RaceListService.Models.runnerTimeListVM
+
+@{
+                /**/
+
+                ViewBag.Title = "Index";
+                Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Race Predictions for @ViewBag.name</h2>
+<h4>Last Race Predition @ViewBag.last</h4>
+<h4>Average Race Predition @ViewBag.average</h4>
+<h4>Median Race Predition @ViewBag.median</h4>
+
+@using (Html.BeginForm("UpdateSelection", "RunnerTimes", FormMethod.Post))
+{
+    
+    <table class="table">
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                Distance
+            </th>
+            <th>
+                Actual Time
+            </th>
+            <th>
+                Target Time
+            </th>
+            <th>
+                Time Difference
+            </th>
+            <th>
+                HC Prediction Time
+            </th>
+            <th>
+                Select for Next Race
+                @Html.HiddenFor(m => m.runnerId)
+            </th>
+        </tr>
+
+        @foreach (var item in Model.listOfRaces)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaceDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaceDistance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaceActualTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RaceTargetTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeDifference)s
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Predicted)
+            </td>
+            <td>
+
+                <input id="race@(item.EFKey)" type="checkbox"
+                       name="SelectedRaceIDs"
+                       value="@item.EFKey"
+                       @(Model.SelectedRaceIDs.Contains(item.EFKey) ? "checked" : "") />
+            </td>
+
+        </tr>
+        }
+
+    </table>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Update Selection" class="btn btn-default" />
+        </div>
+    </div>
+}
+

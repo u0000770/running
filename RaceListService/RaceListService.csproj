@@ -19,7 +19,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44391</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -162,6 +162,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RequireHttpsAttribute.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
@@ -204,13 +205,19 @@
     <Compile Include="Controllers\LastRaceServiceController.cs" />
     <Compile Include="Controllers\ManageRaceController.cs" />
     <Compile Include="Controllers\memberListsController.cs" />
+    <Compile Include="Controllers\myTimeController.cs" />
+    <Compile Include="Controllers\NewNextRaceController.cs" />
     <Compile Include="Controllers\NextRacesController.cs" />
     <Compile Include="Controllers\racedistancesController.cs" />
     <Compile Include="Controllers\RaceEventsController.cs" />
+    <Compile Include="Controllers\RaceEventServiceController.cs" />
     <Compile Include="Controllers\RaceRunnersController.cs" />
+    <Compile Include="Controllers\RealRaceEventsController.cs" />
     <Compile Include="Controllers\RunnerCRUDSServiceController.cs" />
     <Compile Include="Controllers\runnersController.cs" />
     <Compile Include="Controllers\RunnerServiceController.cs" />
+    <Compile Include="Controllers\RunnerTimesController.cs" />
+    <Compile Include="Controllers\TrophyController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -226,7 +233,10 @@
     <Compile Include="Models\predictTimeVM.cs" />
     <Compile Include="Models\RaceCalc.cs" />
     <Compile Include="Models\Racedetails.cs" />
+    <Compile Include="Models\RaceListVM.cs" />
     <Compile Include="Models\runnerListVM.cs" />
+    <Compile Include="Models\RunnerRaceDetailDTO.cs" />
+    <Compile Include="Models\runnerTimeListVM.cs" />
     <Compile Include="Models\selectRaceVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -263,6 +273,7 @@
     </Content>
     <Content Include="App_Data\testTimes.xlsx" />
     <None Include="Properties\PublishProfiles\rundistance - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\rundistance - Web Deploy1.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -305,11 +316,11 @@
     <Content Include="Views\racedistances\Details.cshtml" />
     <Content Include="Views\racedistances\Edit.cshtml" />
     <Content Include="Views\racedistances\Index.cshtml" />
-    <Content Include="Views\RaceEvents\Create.cshtml" />
-    <Content Include="Views\RaceEvents\Delete.cshtml" />
-    <Content Include="Views\RaceEvents\Details.cshtml" />
-    <Content Include="Views\RaceEvents\Edit.cshtml" />
-    <Content Include="Views\RaceEvents\Index.cshtml" />
+    <Content Include="Views\RunningEvents\Create.cshtml" />
+    <Content Include="Views\RunningEvents\Delete.cshtml" />
+    <Content Include="Views\RunningEvents\Details.cshtml" />
+    <Content Include="Views\RunningEvents\Edit.cshtml" />
+    <Content Include="Views\RunningEvents\Index.cshtml" />
     <Content Include="Views\RaceRunners\Create.cshtml" />
     <Content Include="Views\RaceRunners\Delete.cshtml" />
     <Content Include="Views\RaceRunners\Details.cshtml" />
@@ -337,7 +348,15 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\JRRank\Index.cshtml" />
     <Content Include="Views\Handicap\Index.cshtml" />
+    <Content Include="Views\Handicap\oldDetails.cshtml" />
     <Content Include="Views\Handicap\Details.cshtml" />
+    <Content Include="Views\RunnerTimes\Index.cshtml" />
+    <Content Include="Views\EventRunnerTimes\BatchDelete.cshtml" />
+    <Content Include="Views\myTime\Index.cshtml" />
+    <Content Include="Views\RealRaceEvents\Index.cshtml" />
+    <Content Include="Views\RealRaceEvents\Create.cshtml" />
+    <Content Include="Views\NewNextRace\Index.cshtml" />
+    <Content Include="Views\RealRaceEvents\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -380,6 +399,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Empty\" />
+    <Folder Include="Views\Trophy\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

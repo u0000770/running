@@ -9,6 +9,8 @@ namespace RaceListService.Models
     public class EditEventRunnerTimeVM
     {
         public int RaceId { get; set; }
+
+        public int RunnerId { get; set; }
         public string RunnerName { get; set; }
         [Display(Name = "Event Race Distance")]
         public string RaceDistance { get; set; }

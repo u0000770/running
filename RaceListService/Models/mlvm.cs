@@ -10,6 +10,13 @@ using System.Web.Mvc;
 
 namespace RaceListService.Models
 {
+
+    public class TrophyVM {
+
+        public TrophyVM() { }
+        public List<jrListItemVM> jrTrophyList { get; set; }
+        public List<jrListItemVM> dbTrophyList { get; set; }
+    }
     public class jrListItemVM
     {
         public jrListItemVM()

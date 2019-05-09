@@ -1,0 +1,25 @@
+<h1>Race Calculator</h1>
+<div>
+
+  <label>Select Race: </label>
+
+  <select (change)="calculateRaceDetails($event.target.value)">
+
+    <option value="0">--All--</option>
+
+    <option *ngFor="let race of ListOfRaces" value={{race.Distance}}>
+
+      {{race.Title}}
+
+    </option>
+
+  </select>
+
+
+  <p *ngIf="!RaceTime"><em>Select a race to calculate your time for that race</em></p>
+
+  <h1 *ngIf ="RaceTime">Your predicted time for this selected race based upon your last race time and distance is:</h1>
+  <h2>{{RaceTime}}</h2>
+
+</div>
+

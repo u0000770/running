@@ -1,0 +1,93 @@
+﻿@model RaceListService.Controllers.HandicapController.HCmemberRaceDetailVM
+
+@{
+    /**/
+
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm("UpdateSelection", "Handicap", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.RunnerId, new { Value = Model.RunnerId })
+    <h4>&nbsp;</h4>
+    <h4>@Model.Name HC Predictions</h4>
+    <hr />
+    <h3>Recommended prediction  is @Model.recTime</h3>
+    <h4>&nbsp;</h4>
+    <h4>Average prediction  is @Model.averageTime </h4>
+    <h4>Median prediction  is @Model.medianTime </h4>
+    <h4>Last Race prediction  is @Model.lastRaceTime</h4>
+    <table class="table">
+        <tr>
+            <th>
+                Race
+            </th>
+            <th>
+                Distance
+            </th>
+            <th>
+                Date
+            </th>
+            <th>
+                Actual Time
+            </th>
+            <th>
+                HC Predicted Time
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.listOfRaces)
+        {
+
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.RaceTitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RaceDistance)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RaceDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RaceActualTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Predicted)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RaceId)
+                </td>
+                <td>
+                <td>
+                    @Html.HiddenFor(modelItem => item.IsSelected)
+                    @Html.HiddenFor(modelItem => item.RaceId)
+                    @Html.CheckBoxFor(modelItem => item.IsSelected)
+
+
+                    <input id="chk@(item.RaceId)"
+                           type="checkbox"
+                           value="@item.RaceId"
+                           checked="@item.IsSelected" />
+  
+
+                    @*<input id="run@(item.RaceId)" type="checkbox"
+        name="SelectedRaceIDs"
+        value="@item.RaceId"
+        @(Model.SelectedRaceIDs.Contains(item.RaceId) ? "checked" : "") />*@
+                </td>
+                <td></td>
+            </tr>
+        }
+
+    </table>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Update Selection" class="btn btn-default" />
+        </div>
+    </div>
+    <hr />
+}

@@ -86,6 +86,7 @@ namespace RaceListService.Controllers
             vm.RaceId = eventRunnerTime.EFKey;
             vm.RaceActualTime = eventRunnerTime.Actual;
             vm.RunnerName = runner.firstname + " " + runner.secondname;
+            vm.RunnerId = eventRunnerTime.RunnerId;
            // vm.RaceActualTime = eventRunnerTime.Actual;
             return View(vm);
         }
@@ -103,11 +104,29 @@ namespace RaceListService.Controllers
                 ert.Actual = vm.RaceActualTime;
                 db.Entry(ert).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index", "NextRaces");
+                return RedirectToAction("Details", "runners", new { id = vm.RunnerId});
             }
            
             return View(vm);
         }
+
+
+        ////[HttpPost, ActionName("BatchDelete")]
+        ////[ValidateAntiForgeryToken]
+        //public ActionResult BatchDelete()
+        //{
+        //    var killdate = DateTime.Now.AddYears(-1);
+        //    var deadrecords = db.EventRunnerTimes.Where(r => r.Date < killdate);
+        //    if (deadrecords.Count() > 0)
+        //    {
+        //        foreach (var objR in deadrecords)
+        //        {
+        //            deadrecords.
+        //        }
+        //    }
+        //    objBS.SaveChanges();
+        //    return View(deadrecords);
+        //}
 
         // GET: EventRunnerTimes/Delete/5
         public ActionResult Delete(int? id)

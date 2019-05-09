@@ -8,7 +8,8 @@ namespace RaceListService.Models
 {
     public class runnerListVMItem
     {
-
+        [Display(Name = "UKAN")]
+        public string ukan { get; set; }
         [Display(Name = "First Name")]
         public string firstname { get; set; }
         [Display(Name = "Family Name")]
@@ -46,7 +47,8 @@ namespace RaceListService.Models
                  firstname  = p.firstname,
                  secondname = p.secondname,
                   Active = (bool)p.Active,
-                   EFKey = p.EFKey
+                   EFKey = p.EFKey,
+                    ukan = p.ukan
                    
             }
             ).AsEnumerable().OrderBy(r => r.firstname).OrderBy(r => r.secondname).OrderByDescending(r => r.Active);
@@ -62,7 +64,8 @@ namespace RaceListService.Models
                 firstname = p.firstname,
                 secondname = p.secondname,
                 Active = (bool)p.Active,
-                EFKey = p.EFKey
+                EFKey = p.EFKey,
+                 ukan = p.ukan
 
             }
             ).AsEnumerable().OrderBy(r => r.firstname).OrderBy(r => r.secondname).OrderByDescending(r => r.Active);

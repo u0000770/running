@@ -90,6 +90,58 @@ namespace RaceListService.Controllers
 
         #endregion
 
+        #region new Code
+
+        private List<RaceListService.Models.EventRaceTimesVM> BuildEventRaceList(runner thisRunner, int newDistance)
+        {
+            List<RaceListService.Models.EventRaceTimesVM> listOfRacesVM = new List<RaceListService.Models.EventRaceTimesVM>();
+            var listOfRace = db.EventRunnerTimes.Where(r => r.RunnerId == thisRunner.EFKey && r.Actual != null);
+            var lastThreeRaces = listOfRace.OrderByDescending(r => r.Date).Take(3);
+            double totalTime = 0;
+            int numberOfRaces = 0;
+            foreach (var race in lastThreeRaces)
+            {
+
+
+
+                RaceListService.Models.EventRaceTimesVM ert = new RaceListService.Models.EventRaceTimesVM();
+                ert.RaceId = race.EFKey;
+                ert.RaceDistance = db.distances.SingleOrDefault(d => d.Code == race.Event.DistanceCode).Name;
+                var distance = db.distances.SingleOrDefault(d => d.Code == race.Event.DistanceCode).Value;
+                ert.RaceTitle = race.Event.Title;
+
+                int x = race.Actual ?? 0;
+                int y = (int)CalculatePredicion(newDistance, distance, x);
+                numberOfRaces++;
+
+                ert.RaceActualTime = RaceListService.Models.EventRaceTimesVM.formatResult(x);
+                ert.TargetTime = y;
+                ert.RaceTargetTime = RaceListService.Models.EventRaceTimesVM.formatResult(y);
+                int td = 0;
+                if (x != 0)
+                {
+                    td = y - x;
+                }
+                if (td > 0)
+                { ert.TimeDifference = (y - x).ToString(); }
+                else
+                { ert.TimeDifference = 0.ToString(); }
+
+
+                if (race.Date != null)
+                {
+                    ert.RaceDate = (DateTime)race.Date;
+                    listOfRacesVM.Add(ert);
+                }
+
+            }
+
+            return listOfRacesVM;
+        }
+
+
+        #endregion
+
 
         #region Update NextRace and EventRunnerTimes with new prediction
 

@@ -7,6 +7,18 @@ using RunningModel;
 
 namespace RaceListService.Models
 {
+    public class RaceItemDTO
+    {
+        public string Title { get; set; } 
+        public double Distance { get; set; }
+    }
+
+
+    public class RunnerLastRaceDTO
+    {
+        public int RaceTime { get; set; }
+        public double Distance { get; set; }
+    }
     public class LastRaceDTO
     {
         public int RunnerId { get; set; }
@@ -25,16 +37,16 @@ namespace RaceListService.Models
 
     public class RunnerDTO
     {
-        public int RunnerId { get; set; }
+        public string RunnerUKAN { get; set; }
 
         public string RunnerName { get; set; }
 
-        internal static IEnumerable<RunnerDTO> BuildListofRunners(IOrderedQueryable<runner> allRunners)
+        internal static IEnumerable<RunnerDTO> BuildListofRunners(List<runner> allRunners)
         {
 
             var dto = allRunners.Select(r => new RunnerDTO
             {
-                 RunnerId = r.EFKey,
+                RunnerUKAN = r.ukan,
                  RunnerName = r.secondname + " " + r.firstname,
             }).AsEnumerable();
 

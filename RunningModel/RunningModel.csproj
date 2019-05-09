@@ -92,6 +92,9 @@
     <Compile Include="race.cs">
       <DependentUpon>ModelRunning.tt</DependentUpon>
     </Compile>
+    <Compile Include="RaceEvent.cs">
+      <DependentUpon>ModelRunning.tt</DependentUpon>
+    </Compile>
     <Compile Include="runner.cs">
       <DependentUpon>ModelRunning.tt</DependentUpon>
     </Compile>

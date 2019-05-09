@@ -21,6 +21,7 @@ namespace RunningModel
         public Nullable<int> Actual { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
         public Nullable<bool> Active { get; set; }
+        public Nullable<int> RaceEventId { get; set; }
     
         public virtual Event Event { get; set; }
         public virtual runner runner { get; set; }

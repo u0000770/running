@@ -28,7 +28,7 @@ namespace RaceListService.Controllers
             {
                 Session["admin"] = true;
                 TempData["targetdistance"] = 10000;
-                return RedirectToAction("Index", "NextRaces");
+                return RedirectToAction("Index", "NewNextRace");
             }
             else
             {
@@ -38,7 +38,7 @@ namespace RaceListService.Controllers
                     if (runner != null)
                     {
                         Session["admin"] = false;
-                        return RedirectToAction("Details", "NextRaces", new { id = runner.EFKey });
+                        return RedirectToAction("Index", "myTime", new { id = runner.EFKey });
                     }
                     else
                     {

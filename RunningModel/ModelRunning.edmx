@@ -43,6 +43,7 @@
           <Property Name="Actual" Type="int" />
           <Property Name="Date" Type="datetime" />
           <Property Name="Active" Type="bit" />
+          <Property Name="RaceEventId" Type="int" />
         </EntityType>
         <EntityType Name="Events">
           <Key>
@@ -92,6 +93,15 @@
           <Property Name="distance" Type="float" Nullable="false" />
           <Property Name="time" Type="int" Nullable="false" />
           <Property Name="runner" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RaceEvent">
+          <Key>
+            <PropertyRef Name="EFKey" />
+          </Key>
+          <Property Name="EFKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EventId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="runners">
           <Key>
@@ -166,6 +176,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_RaceEvent_Events1">
+          <End Role="Events" Type="Self.Events" Multiplicity="1" />
+          <End Role="RaceEvent" Type="Self.RaceEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Events">
+              <PropertyRef Name="EFKey" />
+            </Principal>
+            <Dependent Role="RaceEvent">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="RunningModelStoreContainer">
           <EntitySet Name="Comps" EntityType="Self.Comps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Discipline" EntityType="Self.Discipline" Schema="dbo" store:Type="Tables" />
@@ -176,6 +198,7 @@
           <EntitySet Name="memberList" EntityType="Self.memberList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NextRace" EntityType="Self.NextRace" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="race" EntityType="Self.race" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RaceEvent" EntityType="Self.RaceEvent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="runners" EntityType="Self.runners" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_EventRunnerTimes_Events" Association="Self.FK_EventRunnerTimes_Events">
             <End Role="Events" EntitySet="Events" />
@@ -196,6 +219,10 @@
           <AssociationSet Name="FK_race_memberList" Association="Self.FK_race_memberList">
             <End Role="memberList" EntitySet="memberList" />
             <End Role="race" EntitySet="race" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RaceEvent_Events1" Association="Self.FK_RaceEvent_Events1">
+            <End Role="Events" EntitySet="Events" />
+            <End Role="RaceEvent" EntitySet="RaceEvent" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -299,7 +326,12 @@
             <End Role="runner" EntitySet="runners" />
             <End Role="NextRace" EntitySet="NextRaces" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="RaceEvents" EntityType="RunningModel.RaceEvent" />
+          <AssociationSet Name="FK_RaceEvent_Events1" Association="RunningModel.FK_RaceEvent_Events1">
+            <End Role="Event" EntitySet="Events" />
+            <End Role="RaceEvent" EntitySet="RaceEvents" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="Comp">
           <Key>
             <PropertyRef Name="EFKey" />
@@ -322,6 +354,7 @@
           <NavigationProperty Name="runner" Relationship="RunningModel.FK_EventRunnerTimes_runners" FromRole="EventRunnerTime" ToRole="runner" />
           <Property Name="Date" Type="DateTime" Precision="3" />
           <Property Name="Active" Type="Boolean" />
+          <Property Name="RaceEventId" Type="Int32" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
@@ -334,7 +367,8 @@
           <Property Name="DistanceCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="Boolean" />
           <NavigationProperty Name="EventRunnerTimes" Relationship="RunningModel.FK_EventRunnerTimes_Events" FromRole="Event" ToRole="EventRunnerTime" />
-        </EntityType>
+          <NavigationProperty Name="RaceEvents" Relationship="RunningModel.FK_RaceEvent_Events1" FromRole="Event" ToRole="RaceEvent" />
+          </EntityType>
         <Association Name="FK_EventRunnerTimes_Events">
           <End Type="RunningModel.Event" Role="Event" Multiplicity="1" />
           <End Type="RunningModel.EventRunnerTime" Role="EventRunnerTime" Multiplicity="*" />
@@ -405,7 +439,29 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <EntityType Name="RaceEvent">
+          <Key>
+            <PropertyRef Name="EFKey" />
+          </Key>
+          <Property Name="EFKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EventId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Event" Relationship="RunningModel.FK_RaceEvent_Events1" FromRole="RaceEvent" ToRole="Event" />
+        </EntityType>
+        <Association Name="FK_RaceEvent_Events1">
+          <End Type="RunningModel.Event" Role="Event" Multiplicity="1" />
+          <End Type="RunningModel.RaceEvent" Role="RaceEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="EFKey" />
+            </Principal>
+            <Dependent Role="RaceEvent">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -478,6 +534,7 @@
           <EntitySetMapping Name="EventRunnerTimes">
             <EntityTypeMapping TypeName="RunningModel.EventRunnerTime">
               <MappingFragment StoreEntitySet="EventRunnerTimes">
+                <ScalarProperty Name="RaceEventId" ColumnName="RaceEventId" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Actual" ColumnName="Actual" />
@@ -518,6 +575,16 @@
                 <ScalarProperty Name="Time" ColumnName="Time" />
                 <ScalarProperty Name="Distance" ColumnName="Distance" />
                 <ScalarProperty Name="RunnerId" ColumnName="RunnerId" />
+                <ScalarProperty Name="EFKey" ColumnName="EFKey" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RaceEvents">
+            <EntityTypeMapping TypeName="RunningModel.RaceEvent">
+              <MappingFragment StoreEntitySet="RaceEvent">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
                 <ScalarProperty Name="EFKey" ColumnName="EFKey" />
               </MappingFragment>
             </EntityTypeMapping>

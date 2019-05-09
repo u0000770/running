@@ -21,6 +21,37 @@ namespace RaceListService.Models
         public DateTime date {get;set; }
     }
 
+
+    public class currentNextRaceVM
+    {
+        public int RaceId { get; set; }
+        [Display(Name = "Race Name")]
+        public string RaceName { get; set; }
+        [Display(Name = "Distance")]
+        public double Distance { get; set; }
+        [Display(Name = "Date")]
+        public DateTime date { get; set; }
+
+        public List<newNextRaceVM> Preditions { get; set; }
+    }
+
+
+    public class newNextRaceVM
+    {
+        public int RunnerId { get; set; }
+
+        [Display(Name = "Name")]
+        public string RunnerName { get; set; }
+
+        [Display(Name = "UKAN")]
+        public string UKAN { get; set; }
+
+        [Display(Name = "Predicted Time")]
+        public string PredictedTime { get; set; }
+
+
+    }
+
     public class RaceListItemVM
     {
         public int RunnerId { get; set; }

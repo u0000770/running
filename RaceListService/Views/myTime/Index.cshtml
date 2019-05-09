@@ -1,0 +1,98 @@
+﻿
+@model RaceListService.Models.memberRaceDetailVM
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h4>&nbsp;</h4>
+<div class="panel panel-default">
+    <div class="panel-body">
+
+        @using (Html.BeginForm("index", "myTime", FormMethod.Post, new { id = "MyForm" }))
+        {
+            @Html.HiddenFor(m => m.RunnerId)
+            <fieldset class="fieldset">
+                <legend>@Model.ukaNumber  @Model.Name</legend>
+                <div class="form-group">
+                    <label for="distance">Select Target Race : </label>
+                    @Html.DropDownList("elistValue", null, new { onchange = "this.form.submit();" })
+                </div>
+                <div class="form-group">
+                    <h4>Target time for selected race is: @Model.targetTime</h4>
+                    @if (Model.lastRaceTitle != null)
+                    {
+
+                        
+                    <p>@Model.lastRaceTitle is a @Model.lastRaceDistance race on @Model.lastRaceDate.ToString("M") and you have @Model.totalTime weeks to prepare</p>
+                    <p>You need to be able to run at @Model.pace per mile pace to achieve this target</p>
+                    }
+                </div>
+
+            </fieldset>
+        }
+
+    </div>
+</div>
+<h4>&nbsp;</h4>
+<div class="panel-body">
+    <fieldset class="fieldset">
+        <h4>This calculation is based on these recorded races</h4>
+        <table class="table">
+            <tr>
+                <th>
+                    Race
+                </th>
+                <th>
+                    Distance
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Recorded Time
+                </th>
+                <th></th>
+            </tr>
+            @if (Model.listOfRaces != null)
+            {
+                foreach (var item in Model.listOfRaces)
+                {
+
+                    <tr>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RaceTitle)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RaceDistance)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RaceDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RaceActualTime)
+                        </td>
+
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+
+                    <td>
+                        We have no races recorded
+                    </td>
+
+                </tr>
+            }
+
+        </table>
+    </fieldset>
+    </div>
+
+
+
+
+

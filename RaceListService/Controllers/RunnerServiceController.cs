@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Web.Mvc;
 
 namespace RaceListService.Controllers
 {
@@ -22,10 +23,12 @@ namespace RaceListService.Controllers
         /// when http://rundistance.azurewebsites.net/api/RunnerService is called
         /// </summary>
         /// <returns>A List of JSON objects each with the RunnerDTO shape</returns>
+        /// 
+        [RequireHttps]
         public IEnumerable<Models.RunnerDTO> Get()
         {
 
-            var allRunners = db.runners.Where(r => r.Active == true).OrderBy(n => n.secondname);
+            var allRunners = db.runners.Where(r => r.Active == true).OrderBy(n => n.secondname).ToList();
             
             IEnumerable<Models.RunnerDTO> dto = Models.RunnerDTO.BuildListofRunners(allRunners);
 
@@ -34,20 +37,52 @@ namespace RaceListService.Controllers
 
 
 
+
+
+
+
+
         /// <summary>
         /// when http://rundistance.azurewebsites.net/api/RunnerService/id is called
         /// </summary>
         /// <param name="id">Key value for a specific Runner</param>
         /// <returns>A single DTO that describes the last race for that runner</returns>
-        public Models.LastRaceDTO GetLastRace(int id)
-        { 
-            var thisRace = db.LastRaces.FirstOrDefault(r => r.RunnerId == id);
-            Models.LastRaceDTO dto = new Models.LastRaceDTO();
-            dto.RunnerId = thisRace.RunnerId;
-            dto.RunnerName = thisRace.runner.secondname + " " + thisRace.runner.firstname;
-            dto.LastTime = formatResult(thisRace.Time);
-            dto.LastDistance = db.distances.Single(d => d.Value == thisRace.Distance).Name;
-            dto.date = thisRace.Date.ToShortDateString();
+        [RequireHttps]
+        public Models.RunnerRaceDetailDTO GetLastRace(string ukan)
+        {
+            Models.RunnerRaceDetailDTO dto = new Models.RunnerRaceDetailDTO();
+            var distance = db.distances;
+            var thisRunner = db.runners.SingleOrDefault(r => r.ukan == ukan);
+            if (thisRunner != null)
+            {
+                var listOfRace = db.EventRunnerTimes.Where(r => r.RunnerId == thisRunner.EFKey && r.Actual != null);
+                var lastThreeRaces = listOfRace.OrderByDescending(r => r.Date);
+                dto.ukaNumber = thisRunner.ukan;
+                dto.Name = thisRunner.firstname + " " + thisRunner.secondname;
+                
+                foreach(var r in lastThreeRaces)
+                {
+                    Models.EventRaceTimesDTO ert = new Models.EventRaceTimesDTO();
+                    ert.RaceId = r.EFKey;
+                    ert.RaceActualTime = formatResult((int)r.Actual);
+                    ert.RaceTitle = r.Event.Title;
+                    ert.RaceDate = r.Date.Value.ToShortDateString();
+                    ert.RaceDistance = distance.SingleOrDefault(d => d.Code == r.Event.DistanceCode).Name;
+                    if (r.Target != null )
+                    {
+                        ert.RaceTargetTime = formatResult((int)r.Target);
+                    }
+                    else
+                    {
+                        ert.RaceTargetTime = "non set";
+                    }
+                    dto.listOfRaces.Add(ert);
+                }
+                
+            }
+
+             
+            
             return dto;
         }
 

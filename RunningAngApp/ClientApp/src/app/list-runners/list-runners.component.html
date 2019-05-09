@@ -1,0 +1,22 @@
+<h1>Top 10 Club Runners 2019</h1>
+
+<p>This only displays the first 10</p>
+
+<p *ngIf="!runners"><em>Loading...</em></p>
+
+<table class='table' *ngIf="runners">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>UKAN</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let r of runners">
+      <td>{{ r.RunnerName }}</td>
+      
+      <td><a [routerLink]="['/details', r.RunnerUKAN]">{{ r.RunnerUKAN }}</a></td>
+    </tr>
+  </tbody>
+</table>

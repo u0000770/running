@@ -18,6 +18,7 @@ namespace RunningModel
         public Event()
         {
             this.EventRunnerTimes = new HashSet<EventRunnerTime>();
+            this.RaceEvents = new HashSet<RaceEvent>();
         }
     
         public int EFKey { get; set; }
@@ -29,5 +30,7 @@ namespace RunningModel
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EventRunnerTime> EventRunnerTimes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RaceEvent> RaceEvents { get; set; }
     }
 }

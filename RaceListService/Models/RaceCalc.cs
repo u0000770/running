@@ -7,7 +7,11 @@ namespace RaceListService.Models
 {
     public class RaceCalc
     {
-        
+
+        public static double CalculatePredicion(double distances, double oldDistance, int oldtime)
+        {
+            return (calcPredictedTime(oldDistance, Convert.ToDouble(distances), oldtime) + cameron(oldDistance, Convert.ToDouble(distances), oldtime)) / 2;
+        }
 
         public static string formatTime(int result)
         {

@@ -35,5 +35,6 @@ namespace RunningModel
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<LastRace> LastRaces { get; set; }
         public virtual DbSet<NextRace> NextRaces { get; set; }
+        public virtual DbSet<RaceEvent> RaceEvents { get; set; }
     }
 }

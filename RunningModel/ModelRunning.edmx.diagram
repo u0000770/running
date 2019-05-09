@@ -9,18 +9,20 @@
         <EntityTypeShape EntityType="RunningModel.distance" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RunningModel.memberList" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="RunningModel.race" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RunningModel.runner" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RunningModel.runner" Width="1.5" PointX="11.75" PointY="0.5" IsExpanded="true" />
         <AssociationConnector Association="RunningModel.FK_race_memberList" ManuallyRouted="false" />
         <EntityTypeShape EntityType="RunningModel.Comp" Width="1.5" PointX="0.75" PointY="6.75" />
-        <EntityTypeShape EntityType="RunningModel.EventRunnerTime" Width="1.5" PointX="10" PointY="2.5" />
-        <EntityTypeShape EntityType="RunningModel.Event" Width="1.5" PointX="7.75" PointY="1" />
+        <EntityTypeShape EntityType="RunningModel.EventRunnerTime" Width="2.5" PointX="8.5" PointY="3.75" />
+        <EntityTypeShape EntityType="RunningModel.Event" Width="1.5" PointX="6.375" PointY="0.5" />
         <AssociationConnector Association="RunningModel.FK_EventRunnerTimes_Events" />
         <AssociationConnector Association="RunningModel.FK_EventRunnerTimes_runners" />
-        <EntityTypeShape EntityType="RunningModel.LastRace" Width="1.5" PointX="7" PointY="4.125" />
+        <EntityTypeShape EntityType="RunningModel.LastRace" Width="1.5" PointX="5.375" PointY="4" />
         <AssociationConnector Association="RunningModel.FK_LastRace_runners" />
         <EntityTypeShape EntityType="RunningModel.NextRace" Width="1.5" PointX="7" PointY="7.25" />
         <AssociationConnector Association="RunningModel.FK_NextRace_runners" />
-      </Diagram>
+        <EntityTypeShape EntityType="RunningModel.RaceEvent" Width="1.5" PointX="8.625" PointY="0.75" />
+        <AssociationConnector Association="RunningModel.FK_RaceEvent_Events1" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

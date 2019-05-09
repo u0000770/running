@@ -27,7 +27,7 @@
             admin = (bool)ViewBag.Admin;
             if (admin)
             {
-                <li>@Html.ActionLink("List of Runners", "Index", "NextRaces", new { area = "" }, null)</li>
+                <li>@Html.ActionLink("Calculate Next Race", "Index", "NewNextRaces", new { area = "" }, null)</li>
                 <li>@Html.ActionLink("Runner Admin", "Index", "runners", new { area = "" }, null)</li>
                 <li>@Html.ActionLink("System Admin", "Index", "Admin", new { area = "" }, null)</li>
                 <li>@Html.ActionLink("JR Trophy", "Index", "JRRank", new { area = "" }, null)</li>

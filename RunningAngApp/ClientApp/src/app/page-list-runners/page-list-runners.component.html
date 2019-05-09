@@ -1,0 +1,40 @@
+<h1>Top 10 Club Runners 2019</h1>
+
+<p>This only displays the first 10</p>
+
+<p *ngIf="!runners"><em>Loading...</em></p>
+
+<table class='table' *ngIf="runners">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>UKAN</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let r of pagedItems">
+      <td>{{ r.RunnerName }}</td>
+
+      <td><a [routerLink]="['/details', r.RunnerUKAN]">{{ r.RunnerUKAN }}</a></td>
+    </tr>
+  </tbody>
+</table>
+<!-- pager -->
+<ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+  <li [ngClass]="{disabled:pager.currentPage === 1}">
+    <a (click)="setPage(1)">First</a>
+  </li>
+  <li [ngClass]="{disabled:pager.currentPage === 1}">
+    <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+  </li>
+  <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+    <a (click)="setPage(page)">{{page}}</a>
+  </li>
+  <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+    <a (click)="setPage(pager.currentPage + 1)">Next</a>
+  </li>
+  <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+    <a (click)="setPage(pager.totalPages)">Last</a>
+  </li>
+</ul>

@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace RaceListService.Controllers
 {
-    public class RaceEventsController : Controller
+    public class RunningEventsController : Controller
     {
         private RunningModelEntities db = new RunningModelEntities();
 

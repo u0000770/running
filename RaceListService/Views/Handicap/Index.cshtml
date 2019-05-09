@@ -36,8 +36,8 @@
             @Html.DisplayFor(modelItem => item.numberofRaces)
         </td>
         <td>
-            
-            @Html.ActionLink("Details", "Details", new { id=item.RunnerId  }) 
+            @Html.ActionLink("View Predictions","Index","RunnerTimes",new { id = item.RunnerId }, null)
+         
        
         </td>
     </tr>

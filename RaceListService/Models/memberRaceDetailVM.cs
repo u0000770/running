@@ -15,6 +15,10 @@ namespace RaceListService.Models
         [Display(Name = "Name")]
         public string Name { get; set; }
 
+        [Display(Name = "UKA Number")]
+        public string ukaNumber { get; set; }
+
+        public string pace { get; set; }
         public int lastRaceId { get; set; }
         [Display(Name = "Last Race Distance")]
         public string lastRaceDistance { get; set; }
@@ -24,10 +28,21 @@ namespace RaceListService.Models
         public string lastRaceTime { get; set; }
         [Display(Name = "Total Time Difference ")]
         public int totalTime { get; set; }
+        public string targetTime { get; set; }
         [Display(Name = "Last Race Date")]
         [DataType(DataType.Date)]
         public DateTime lastRaceDate { get; set; }
         public List<EventRaceTimesVM> listOfRaces = new List<EventRaceTimesVM>();
+       
+    }
+
+
+    public class EventRaceSelectVM : EventRaceTimesVM
+    {
+
+        public List<int> SelectedRaceEventIDs { get; set; }
+
+        public List<HCListItemVM> selectedRaces;
     }
 
     public class EventRaceTimesVM
@@ -46,6 +61,8 @@ namespace RaceListService.Models
         public DateTime RaceDate { get; set; }
         [Display(Name = "Time Difference")]
         public string TimeDifference { get; set; }
+
+        public int TargetTime { get; set; }
 
         public static string formatResult(int result)
         {

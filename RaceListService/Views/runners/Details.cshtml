@@ -1,67 +1,73 @@
-﻿@model runners.runner
+﻿@model IEnumerable<RaceListService.Models.EventRaceTimesVM>
 
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>Details for @ViewBag.Runner.Name</h2>
 
-<div>
-    <h4>runner</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.firstname)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.firstname)
-        </dd>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RaceId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RaceDistance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RaceTitle)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RaceTargetTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RaceActualTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RaceDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TimeDifference)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TargetTime)
+        </th>
+        <th></th>
+    </tr>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.secondname)
-        </dt>
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceDistance)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceTitle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceTargetTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceActualTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RaceDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TimeDifference)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TargetTime)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", "EventRunnerTimes", new {  id=item.RaceId  }, null)           
+        </td>
+    </tr>
+}
 
-        <dd>
-            @Html.DisplayFor(model => model.secondname)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ukan)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ukan)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.dob)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.dob)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.email)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Active)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Active)
-        </dd>
-
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.EFKey }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+</table>
+<p>@Html.ActionLink("List","Index") </p>
