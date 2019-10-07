@@ -18,10 +18,19 @@ namespace RaceListService.Controllers
         // GET: RunnerTimes
         public ActionResult Index(int id)
         {
-            
-            var all = db.EventRunnerTimes.Where(r => r.RunnerId == id);
-
-            var handicapRaces = filterHandicap(all);
+            DateTime yearAgo = new DateTime(2019, 1, 1);
+            // var all = db.EventRunnerTimes.Where(r => r.RunnerId == id);
+            var all = db.EventRunnerTimes.Where(r => r.RunnerId == id && r.Date > yearAgo && (r.Actual != null || r.Actual > 0) ).OrderByDescending(r => r.Date);
+            // var handicapRaces = filterHandicap(all);
+            List<EventRunnerTime> handicapRaces = new List<EventRunnerTime>();
+            foreach(var r in all)
+            {
+                if ( r.Active == null)
+                {
+                    r.Active = true;
+                }
+                handicapRaces.Add(r);
+            }
 
             runnerTimeListVM vm = new runnerTimeListVM();
             vm.runnerId = id;
@@ -36,7 +45,7 @@ namespace RaceListService.Controllers
             ViewBag.last = runnerTimeItemVM.formatResult((int)GetLast(vm));
             var runner = db.runners.Find(id);
             ViewBag.name = runner.secondname + " " + runner.firstname;
-            vm.listOfRaces.OrderBy(r => r.PredictedTimeValue);
+            vm.listOfRaces.OrderBy(r => r.RaceDate).OrderBy(r => r.PredictedTimeValue);
             return View(vm);
         }
 
@@ -83,7 +92,7 @@ namespace RaceListService.Controllers
 
         public decimal GetLast(runnerTimeListVM vm)
         {
-            var sorted = vm.listOfRaces.Where(s => s.Active).OrderBy(r => r.RaceDate);
+            var sorted = vm.listOfRaces.Where(r => r.Active).OrderBy(r => r.RaceDate);
             return sorted.Last().PredictedTimeValue;
         }
 
@@ -121,8 +130,13 @@ namespace RaceListService.Controllers
             tempArray.Sort((x, y) => y.CompareTo(x));
 
             decimal medianValue = 0;
-
-            if (count % 2 == 0)
+            if  (count == 3)
+            {
+                var sum = tempArray.Sum();
+                medianValue = sum / 3;
+                return medianValue;
+            }
+            if (count > 0 && count % 2 == 0)
             {
                 // count is even, need to get the middle two elements, add them together, then divide by 2
                 int middleElement1 = tempArray[(count / 2) - 1];

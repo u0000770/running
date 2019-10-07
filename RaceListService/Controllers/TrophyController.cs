@@ -43,7 +43,7 @@ namespace RaceListService.Controllers
                 vmrunner.jrPoints = 0;
                 vmrunner.races = 0;
                 vmrunner.JR = false;
-                foreach (var race in listOfRace)
+                foreach (var race in top5Races)
                 {
                     bool longrace = isLongRace(race);
                     if (longrace) { vmrunner.JR = true; }

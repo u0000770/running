@@ -22,6 +22,18 @@ namespace RaceListService.Controllers
             return View(eventRunnerTimes.ToList());
         }
 
+        public ActionResult Reset()
+        {
+            var allert = db.EventRunnerTimes;
+            foreach (var r in allert)
+            {
+                r.Active = true;
+                db.Entry(r).State = EntityState.Modified;
+            }
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
         // GET: EventRunnerTimes/Details/5
         public ActionResult Details(int? id)
         {

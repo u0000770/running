@@ -1,0 +1,89 @@
+﻿@model IEnumerable<RaceListService.Models.RaceResultItemVM>
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h4>&nbsp;</h4>
+<div class="panel panel-default">
+    <div class="panel-body">
+
+        @using (Html.BeginForm("ListResult", "RaceResult", FormMethod.Post, new { id = "MyForm" }))
+        {
+
+            <fieldset class="fieldset">
+                <legend>Select Next Race Results to Display</legend>
+                <div class="form-group">
+                    <label for="distance">Target Race : </label>
+                    @Html.DropDownList("elistValue")
+                </div>
+                <div class="form-group">
+                    <input type="submit" name="calcTime" value="Show Result" />
+                </div>
+
+            </fieldset>
+        }
+
+    </div>
+</div>
+@if (Model != null)
+{
+    <h4>Race Result</h4>
+    <div class="panel-body">
+        <fieldset class="fieldset">
+            <table class="table">
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Predicted Time
+                    </th>
+                    <th>
+                        Actual Time
+                    </th>
+                    <th>
+                        Time Difference
+                    </th>
+                    <th>
+                        Trophy Time
+                    </th>
+                    <th>
+                        Trophy Points
+                    </th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RunnerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.predictedTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.actualTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.differenceTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.trophyTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.trophyPoints)
+                    </td>
+
+                </tr>
+                }
+
+
+            </table>
+        </fieldset>
+    </div>
+
+
+}
+

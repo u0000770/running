@@ -366,7 +366,9 @@ namespace RaceListService.Controllers
         // GET: Handicap
         public ActionResult Index()
         {
-
+            DateTime yearAgo = new DateTime(2019, 1, 1);
+            DateTime cutoff = new DateTime(2019, 08, 03);
+           
             List<RaceListService.Models.HCListItemVM> vm = new List<Models.HCListItemVM>();
             var all = db.runners.Where(r => r.Active == true && r.EventRunnerTimes.Count > 0);
            
@@ -375,17 +377,19 @@ namespace RaceListService.Controllers
                 RaceListService.Models.HCListItemVM vmrunner = new RaceListService.Models.HCListItemVM();
                 vmrunner.RunnerId = runner.EFKey;
                 vmrunner.RunnerName = runner.firstname + " " + runner.secondname;
-                var listOfRace = db.EventRunnerTimes.Where(r => r.RunnerId == runner.EFKey);
-                List<EventRunnerTime> shortRaces = new List<EventRunnerTime>();
-                foreach (var race in listOfRace)
-                {
-                    if (isHandiCapRace(race))
-                    {
-                        shortRaces.Add(race);
-                    }
-                }
-                int shortRaceCount = shortRaces.Count();
-                if (shortRaceCount >= 3)
+                var listOfRace = db.EventRunnerTimes.Where(r => r.RunnerId == runner.EFKey && r.Date > yearAgo && (r.Actual != null || r.Actual >0)).OrderByDescending(r => r.Date);
+                var racesbeforedate = listOfRace.Where(r => r.Date > cutoff);
+                //List<EventRunnerTime> shortRaces = new List<EventRunnerTime>();
+                //foreach (var race in listOfRace)
+                //{
+                //    if (isHandiCapRace(race))
+                //    {
+                //        shortRaces.Add(race);
+                //    }
+                //}
+                int shortRaceCount = listOfRace.Count();
+                int beforedatecount = racesbeforedate.Count();
+                if (shortRaceCount >= 3 && beforedatecount > 0)
                 {
                     vmrunner.RunnerId = runner.EFKey;
                     vmrunner.RunnerName = runner.secondname + " " + runner.firstname;
@@ -396,7 +400,6 @@ namespace RaceListService.Controllers
                 
 
             }
-
             var nvm = vm.OrderByDescending(x => x.numberofRaces);
             return View(nvm);
 

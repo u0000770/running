@@ -211,6 +211,7 @@
     <Compile Include="Controllers\racedistancesController.cs" />
     <Compile Include="Controllers\RaceEventsController.cs" />
     <Compile Include="Controllers\RaceEventServiceController.cs" />
+    <Compile Include="Controllers\RaceResultController.cs" />
     <Compile Include="Controllers\RaceRunnersController.cs" />
     <Compile Include="Controllers\RealRaceEventsController.cs" />
     <Compile Include="Controllers\RunnerCRUDSServiceController.cs" />
@@ -234,10 +235,12 @@
     <Compile Include="Models\RaceCalc.cs" />
     <Compile Include="Models\Racedetails.cs" />
     <Compile Include="Models\RaceListVM.cs" />
+    <Compile Include="Models\RaceResultVM.cs" />
     <Compile Include="Models\runnerListVM.cs" />
     <Compile Include="Models\RunnerRaceDetailDTO.cs" />
     <Compile Include="Models\runnerTimeListVM.cs" />
     <Compile Include="Models\selectRaceVM.cs" />
+    <Compile Include="Models\Wava.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -357,6 +360,7 @@
     <Content Include="Views\RealRaceEvents\Create.cshtml" />
     <Content Include="Views\NewNextRace\Index.cshtml" />
     <Content Include="Views\RealRaceEvents\Edit.cshtml" />
+    <Content Include="Views\RaceResult\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

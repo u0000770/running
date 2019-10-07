@@ -14,6 +14,10 @@ namespace RaceListService.Controllers
     [EnableCors("*", "*", "*")]
     public class RunnerServiceController : ApiController
     {
+
+        
+
+
         /// <summary>
         /// db is a Model of the underlying data
         /// </summary>
